@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="sentinelai-architecture" name="SentinelAI Architecture">
+    <mxGraphModel dx="1021" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="API Consumer&#xa;(Browser / Client / Swagger UI)" vertex="1">
+          <mxGeometry height="70" width="240" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="app" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="SentinelAI Spring Boot App&#xa;(Spring MVC + Spring Data JPA + Spring AI)" vertex="1">
+          <mxGeometry height="410" width="440" x="330" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="controllers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="Controllers&#xa;- /api/logs/upload&#xa;- /api/logs/search&#xa;- /api/rca/analyze&#xa;- /api/rca/jira" vertex="1">
+          <mxGeometry height="140" width="180" x="360" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="services" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="Services&#xa;- LogService&#xa;- EmbeddingService&#xa;- SemanticSearchService&#xa;- RCAService&#xa;- JiraService" vertex="1">
+          <mxGeometry height="140" width="170" x="560" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="repos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="Repositories (JPA)&#xa;- LogRepository&#xa;- KnowledgeBaseRepository" vertex="1">
+          <mxGeometry height="70" width="370" x="365" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="postgres" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="PostgreSQL&#xa;(Docker, pgvector image)&#xa;host: localhost:5111" vertex="1">
+          <mxGeometry height="110" width="220" x="820" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ollama" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Ollama&#xa;(LLM + Embeddings)&#xa;host: localhost:11434&#xa;model: llama3" vertex="1">
+          <mxGeometry height="110" width="220" x="820" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="jira" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Jira (Optional)&#xa;REST API&#xa;/rest/api/2/issue" vertex="1">
+          <mxGeometry height="90" width="220" x="830" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="client" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="controllers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="controllers" style="endArrow=block;html=1;strokeColor=#82b366;" target="services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="services" style="endArrow=block;html=1;strokeColor=#82b366;" target="repos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="repos" style="endArrow=block;html=1;strokeColor=#d6b656;entryX=0.044;entryY=0.889;entryDx=0;entryDy=0;entryPerimeter=0;" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="services" style="endArrow=block;html=1;strokeColor=#b85450;" target="ollama" value="Embed + Chat">
+          <mxGeometry relative="1" x="1" y="16" as="geometry">
+            <mxPoint x="3" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="services" style="endArrow=block;html=1;strokeColor=#9673a6;" target="jira" value="Create Ticket">
+          <mxGeometry relative="1" x="0.4741" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

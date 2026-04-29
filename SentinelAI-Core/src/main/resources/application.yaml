@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    # If running Spring Boot on your host:
+    url: jdbc:postgresql://localhost:5111/sentinelai
+    # If running Spring Boot in a container, use:
+    # url: jdbc:postgresql://host.docker.internal:5111/sentinelai
+    username: sentinel
+    password: sentinel_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3
+      embedding:
+        model: llama3
+
+logging:
+  level:
+    root: INFO
+    '[com.sentinel.ai]': DEBUG
+
+# Custom application properties
+sentinelai:
+  ai-engine:
+    # FastAPI engine endpoint (see SentinelAI-AI-Engine)
+    url: http://localhost:8000/analyze
+    # Default provider for the AI-Engine: groq|ollama|huggingface|openai
+    provider: groq
+  semantic-search:
+    # Uses Spring AI EmbeddingModel (Ollama) to fetch similar historical incidents.
+    # Set to false if you don't have Ollama running locally.
+    enabled: true
+  jira:
+    base-url: https://your-domain.atlassian.net/ # Change to your Jira instance URL
+    username: <jira-username>
+    api-token: <jira-api-token>

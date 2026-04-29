@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: sentinelai-postgres
+    environment:
+      POSTGRES_DB: sentinelai
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel_pass
+    ports:
+      - "5111:5432" # Host port 5111 to avoid conflict with local Postgres
+      # If connecting from another container (e.g., pgAdmin), use host.docker.internal as the host
+    volumes:
+      - ./docker_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: sentinelai-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80" # pgAdmin web UI on host port 5050
+    volumes:
+      - ./docker_pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres

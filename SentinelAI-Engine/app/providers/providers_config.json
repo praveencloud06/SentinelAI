@@ -1,0 +1,16 @@
+ {
+  "huggingface": {
+    "token": "<set HUGGINGFACE_TOKEN env var>",
+    "model": "facebook/bart-large-cnn"
+  },
+  "groq": {
+    "api_key": "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",
+    "model": "llama-3.3-70b-versatile"
+  },
+  "bedrock": {
+    "aws_access_key_id": "YOUR_AWS_KEY",
+    "aws_secret_access_key": "YOUR_AWS_SECRET",
+    "region": "us-east-1",
+    "model": "anthropic.claude-v2"
+  }
+}
