@@ -1,157 +1,100 @@
-🚀 SentinelAI
-Understanding Logs through Past Knowledge and AI Reasoning
-🌟 Vision
+# SentinelAI (Monorepo)
 
-SentinelAI is an evolving system designed to explore how AI can assist in understanding complex logs and incidents.
+SentinelAI helps engineers understand logs and incidents by combining:
+1) **Memory**: retrieve similar historical incidents (RAG retrieval)
+2) **Reasoning**: generate a structured RCA (root cause + fix) via an AI provider
 
-The goal is simple yet powerful:
+This repo contains three deployable parts (UI, Core, AI-Engine) plus Docker compose files for local infra.
 
-Combine past knowledge with intelligent reasoning to help identify root causes faster and more effectively.
+## Components
 
-This project is being developed step-by-step with a focus on clarity, modular design, and future extensibility.
+- **`SentinelAI/sentinelai-ui` (React)**
+  - Single-page UI to paste log text or upload a log file.
+  - Calls the Core API (`/api/rca/analyze`) and renders the structured RCA response.
 
-🧠 Core Idea
+- **`SentinelAI/SentinelAI-Core` (Java, Spring Boot)**
+  - System orchestrator.
+  - Optional retrieval (semantic search) over stored incidents.
+  - Calls the Python AI-Engine for RCA generation and returns the result to the UI.
+  - Stores incidents/embeddings in Postgres (pgvector image is provided for local).
 
-Logs can be understood in two ways:
+- **`SentinelAI/SentinelAI-Engine` (Python, FastAPI)**
+  - AI gateway that routes requests to an AI provider (e.g., `groq` or `ollama`).
+  - Returns a stable, structured RCA payload back to Core.
 
-1. Memory (What has happened before?)
-2. Reasoning (What is happening now?)
+## Data Flow (End-to-End)
 
-SentinelAI combines both through a Dual Capability Architecture:
+1. **User → UI**
+   - Paste log text or upload a file (file is read as text in the browser).
+2. **UI → Core**
+   - `POST /api/rca/analyze` with `{ "log": "<log text>" }`.
+3. **Core (optional) retrieval**
+   - If `sentinelai.semantic-search.enabled=true`, Core embeds the log and searches for similar historical incidents to build context.
+   - If Ollama/embeddings are unavailable, Core logs a warning and continues without historical context.
+4. **Core → AI-Engine**
+   - Core sends a single prompt (log + any retrieved context) to `POST <ai-engine-url>?provider=<provider>`.
+5. **AI-Engine → Provider**
+   - Provider performs LLM inference and returns an RCA.
+6. **Core → UI**
+   - Core returns:
+     - `issue`, `rootCause`, `impactedService`, `recommendedFix`
+     - `provider` and `errors` (for visibility when provider/auth fails)
 
-Historical RCA → Fast, reliable, based on known incidents
-AI/ML Analysis → Flexible, exploratory, for new problems
-🏗️ Current System Features (2026)
-🔹 SentinelAI-Core (Java, Spring Boot)
-Accepts logs from the React UI (file or text)
-Performs vector-based RCA using pgvector embeddings
-Identifies similar past incidents
-Returns known root cause when confidence is high
-Calls Python AI Engine when deeper analysis is needed
-Aggregates and returns results to the UI
-External services configurable via application.yaml
-🔹 SentinelAI-AI-Engine (Python, FastAPI)
-Receives log analysis requests from Java
-Provides a clean abstraction over multiple AI providers
-Supports:
-Ollama (local models)
-HuggingFace (cloud models)
-OpenAI (planned)
-Routes requests dynamically to selected provider
-Returns structured JSON responses
-Designed to be modular and extensible
-🔹 React UI
-Upload log files or paste log text
-Displays RCA results
-Can show:
-History-based result
-AI-based analysis
-Combined insights
-🔄 System Flow (Current)
-User uploads logs via UI
+## API (Core)
 
-Java backend processes request
+- `POST /api/rca/analyze`
+  - Request: `{ "log": "..." }`
+  - Response: `{ issue, rootCause, impactedService, recommendedFix, provider, errors }`
+- `POST /api/logs/upload`
+  - Request: `{ "logType": "text|json|csv", "content": "..." }`
+  - Purpose: store incidents + embeddings for future retrieval
+- `POST /api/logs/search`
+  - Request: `{ "query": "..." }`
+  - Purpose: semantic search over stored incidents (requires embeddings/Ollama)
 
-A. Vector-Based RCA
-Convert logs into embeddings
-Search pgvector database
-If high-confidence match found → return result
-B. AI/ML Log Analysis (Fallback)
-Send logs to Python AI Engine
-AI Engine selects provider (Ollama / HF / etc.)
-Returns structured root cause analysis
-Aggregation
-Best available result is returned
-Optionally both results can be shown
-🧩 Architecture (Textual View)
-User (React UI)
-   |
-   v
-Java Backend (Spring Boot)
-   |
-   v
--------------------------------
-|  Vector RCA (pgvector DB)   |
--------------------------------
-   | (if no match)
-   v
--------------------------------
-|  Python AI Engine (FastAPI) |
-|  - Provider Abstraction     |
-|  - Ollama, HuggingFace, ...|
--------------------------------
-   |
-   v
-Aggregated Results
-   |
-   v
-User (React UI)
-🔌 AI Gateway (Inside Python Engine)
-AI Provider Layer
-   |        |         |         |
-   v        v         v         v
-Ollama   HuggingFace OpenAI   Claude
-(Local)    (Free)     (Future) (Future)
-📦 Response Structure
-{
-  "errors": [],
-  "rootCause": "",
-  "suggestedFix": "",
-  "confidence": 0.0,
-  "provider": ""
-}
+## AI Provider Routing
 
-Security 
-data limit
-RAG : filter response in user ways
+Core controls which provider is used for RCA generation via config:
 
-JIRA : User action
+- `sentinelai.ai-engine.url` (example: `http://localhost:8000/analyze`)
+- `sentinelai.ai-engine.provider` (example: `groq`, `ollama`, `huggingface`, `openai`)
 
-watchdog
+Notes:
+- `provider` affects **analysis** (RCA generation) through the Python AI-Engine.
+- Embeddings for retrieval are owned by Core and currently use **Ollama** when semantic search is enabled.
 
+## Tech Stack (and why)
 
-🌱 Design Principles
-Keep logic modular and replaceable
-Separate orchestration (Java) and AI reasoning (Python)
-Prefer structured outputs over free text
-Enable easy model switching
-Build with future expansion in mind
-🚀 Future Expansion
+- **React**: fast iteration for a simple, form-based UI.
+- **Spring Boot (Java)**: reliable orchestration layer; strong ecosystem for APIs, config profiles, observability, and future enterprise integrations.
+- **FastAPI (Python)**: lightweight AI gateway; easy to add/swap provider adapters.
+- **PostgreSQL + pgvector (Docker image)**: single durable store for incident text + embeddings; simplest RAG storage baseline.
+- **Ollama (optional)**: local embeddings (and optionally local LLM) to support fully local development.
 
-SentinelAI is designed as a foundation that can evolve gradually.
+## Local Run (Typical)
 
-🔹 Near-Term Enhancements
-Improved log parsing and grouping
-Confidence-based routing between Vector RCA and AI analysis
-Better aggregation of multiple results
-🔹 Advanced Capabilities
-Explainability layer (why this root cause?)
-Multi-model comparison and fallback strategies
-Learning from past AI outputs
-🔹 Toward Agentic AI
+1. Start infra (optional but typical):
+   - Postgres/pgvector: `SentinelAI/postgres-docker-compose.yml`
+   - Ollama (for embeddings): `SentinelAI/ollama-docker-compose.yml`
+2. Start AI-Engine:
+   - `cd SentinelAI/SentinelAI-Engine`
+   - `python -m uvicorn app.main:app --reload`
+3. Start Core:
+   - `cd SentinelAI/SentinelAI-Core`
+   - run Spring Boot with the intended profile (e.g., `local`) and verify config in `application-local.yml`
+4. Start UI:
+   - `cd SentinelAI/sentinelai-ui`
+   - `npm start`
 
-Over time, SentinelAI can evolve into a more autonomous system:
+## Configuration Quick Reference (Core)
 
-Tool-based reasoning (logs, RCA, metrics as tools)
-Multi-step investigation workflows
-Context-aware analysis using memory
-Iterative problem-solving instead of one-shot responses
-🧰 Tech Stack
-Java (Spring Boot)
-Python (FastAPI)
-PostgreSQL + pgvector
-React
-Ollama / HuggingFace / OpenAI APIs
+- `sentinelai.semantic-search.enabled`
+  - `true`: retrieval enabled (requires Ollama embeddings)
+  - `false`: retrieval skipped; Core still calls AI-Engine for RCA generation
 
+## Repo Navigation
 
-✅ 1. Request size / context limit
-
-For model: llama-3.3-70b-versatile
-Current limits are:
-
-Limit	Value
-Context window	131072 tokens
-Max output tokens	32768
-
-run UI : npm start
-http://localhost:3000/
+- UI: `SentinelAI/sentinelai-ui/README.md`
+- Core: `SentinelAI/SentinelAI-Core/README.md`
+- AI-Engine: `SentinelAI/SentinelAI-Engine/README.md`
+- Docker: `SentinelAI/postgres-docker-compose.yml`, `SentinelAI/ollama-docker-compose.yml`

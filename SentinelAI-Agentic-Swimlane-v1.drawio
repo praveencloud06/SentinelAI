@@ -1,0 +1,117 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="sentinelai-agentic-swimlane-v1" name="SentinelAI Agentic Swimlane v1">
+    <mxGraphModel dx="815" dy="403" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lane_ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UI (React)" vertex="1">
+          <mxGeometry height="780" width="220" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_core" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Core (Spring Boot)" vertex="1">
+          <mxGeometry height="780" width="260" x="280" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_engine" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="AI-Engine (FastAPI + LangGraph)" vertex="1">
+          <mxGeometry height="780" width="300" x="560" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_elastic" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Elastic / ELK" vertex="1">
+          <mxGeometry height="780" width="220" x="880" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_vector" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Vector Store&#xa;(Postgres/pgvector now, Qdrant later)" vertex="1">
+          <mxGeometry height="780" width="260" x="1120" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_provider" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="LLM Provider&#xa;(Groq / Ollama / HF / ...)" vertex="1">
+          <mxGeometry height="780" width="220" x="1400" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="1) User enters filters&#xa;- service/container&#xa;- env/cluster&#xa;- time range&#xa;- keywords/traceId&#xa;and clicks Analyze" vertex="1">
+          <mxGeometry height="120" width="200" x="50" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="2) Call entry API&#xa;POST /api/live/rca&#xa;(proposed)" vertex="1">
+          <mxGeometry height="70" width="200" x="50" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="3) Validate request + auth&#xa;RBAC / tenant / rate limit" vertex="1">
+          <mxGeometry height="80" width="240" x="290" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="4) Fetch live logs&#xa;Elastic query builder" vertex="1">
+          <mxGeometry height="70" width="240" x="290" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="5) (Optional) Retrieval&#xa;if semantic-search.enabled=true&#xa;embed query + search incidents" vertex="1">
+          <mxGeometry height="90" width="240" x="290" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="6) Build evidence pack&#xa;- top errors/patterns&#xa;- sample snippets&#xa;- retrieved fixes" vertex="1">
+          <mxGeometry height="90" width="240" x="290" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="7) Call agent&#xa;POST AI-Engine /agent/analyze&#xa;(proposed)&#xa;payload: evidence pack" vertex="1">
+          <mxGeometry height="110" width="240" x="290" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;" value="4a) Execute search&#xa;/_search&#xa;with filters + time range" vertex="1">
+          <mxGeometry height="90" width="200" x="890" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="v1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;" value="5a) Similarity search&#xa;top-K incidents&#xa;(pgvector/Qdrant)" vertex="1">
+          <mxGeometry height="90" width="240" x="1130" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="8) Agent Plan (LangGraph)&#xa;- decide tools to call&#xa;- decide provider&#xa;- set budgets" vertex="1">
+          <mxGeometry height="90" width="280" x="570" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="9) (Optional) Tool calls back to Core&#xa;- /api/live/search&#xa;- /api/logs/search&#xa;- /api/rca/jira draft" vertex="1">
+          <mxGeometry height="100" width="280" x="570" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="10) Generate RCA&#xa;POST /analyze?provider=...&#xa;strict JSON output" vertex="1">
+          <mxGeometry height="90" width="280" x="570" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="11) Validate + retry&#xa;- JSON parse&#xa;- missing fields&#xa;- retry budget" vertex="1">
+          <mxGeometry height="90" width="280" x="570" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="10a) LLM inference&#xa;(Groq/Ollama/HF/etc)" vertex="1">
+          <mxGeometry height="70" width="200" x="1410" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ret1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="12) UI shows RCA&#xa;issue/rootCause/fix&#xa;+ provider + errors[]" vertex="1">
+          <mxGeometry height="90" width="200" x="50" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1_s2" edge="1" parent="1" source="s1" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_c1" edge="1" parent="1" source="s2" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="c1" value="HTTP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_c1_c2" edge="1" parent="1" source="c1" style="endArrow=block;html=1;strokeColor=#82b366;" target="c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_c2_e1" edge="1" parent="1" source="c2" style="endArrow=block;html=1;strokeColor=#d6b656;" target="e1" value="Elastic query">
+          <mxGeometry relative="1" x="0.5554" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_e1_c3" edge="1" parent="1" source="e1" style="endArrow=block;html=1;strokeColor=#d6b656;" target="c3" value="results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_c3_v1" edge="1" parent="1" source="c3" style="endArrow=block;html=1;strokeColor=#d6b656;" target="v1" value="top-K search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_v1_c4" edge="1" parent="1" source="v1" style="endArrow=block;html=1;strokeColor=#d6b656;" target="c4" value="matches">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_c4_c5" edge="1" parent="1" source="c4" style="endArrow=block;html=1;strokeColor=#82b366;" target="c5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_c5_a1" edge="1" parent="1" source="c5" style="endArrow=block;html=1;strokeColor=#b85450;" target="a1" value="HTTP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_a1_a2" edge="1" parent="1" source="a1" style="endArrow=block;html=1;strokeColor=#b85450;" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_a2_a3" edge="1" parent="1" source="a2" style="endArrow=block;html=1;strokeColor=#b85450;" target="a3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_a3_p1" edge="1" parent="1" source="a3" style="endArrow=block;html=1;strokeColor=#b85450;" target="p1" value="LLM call">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p1_a4" edge="1" parent="1" source="p1" style="endArrow=block;html=1;strokeColor=#b85450;" target="a4" value="RCA draft">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_a4_ret" edge="1" parent="1" source="a4" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="ret1" value="final RCA + errors[]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

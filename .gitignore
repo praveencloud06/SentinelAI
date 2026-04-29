@@ -1,1 +1,6 @@
 *.pyc
+SentinelAI-Core/.classpath
+SentinelAI-Core/.factorypath
+SentinelAI-Core/.project
+/SentinelAI-Core/.settings
+/SentinelAI-Core/target

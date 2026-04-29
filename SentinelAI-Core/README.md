@@ -56,8 +56,8 @@ This will create a Jira ticket in the specified project with RCA details.
 
 ## High-Level Flow
 1. Log Upload (API) → Store in DB → Preprocess → Embed (Ollama) → Store Embedding
-2. Semantic Search (API) → Vector similarity search in DB
-3. RCA Generator (API) → Retrieve similar logs (RAG) → Analyze with Ollama → Structured RCA output
+2. Semantic Search (API) → Vector similarity search (pluggable: in-memory now, Qdrant/pgvector later)
+3. RCA Generator (API) → Retrieve similar logs (RAG) → Analyze via Python AI-Engine → Structured RCA output
 
 ## Features (MVP)
 - Log Ingestion API (upload JSON, CSV, or text logs)
@@ -70,7 +70,7 @@ This will create a Jira ticket in the specified project with RCA details.
 - Ollama runs locally (Docker, port 11434) and provides LLM models (Llama3/Mistral)
 - Spring AI provides unified interfaces for embedding and chat (LLM) tasks
 - EmbeddingModel: Converts logs/queries to vectors for similarity search
-- ChatModel: Used for RCA generation (structured JSON output)
+- RCA generation is delegated to the Python AI-Engine (provider-selected)
 - All configs externalized in `application-local.yml`
 - No external API calls—100% local
 

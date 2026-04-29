@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="sentinelai-agentic-flow-v1" name="SentinelAI Agentic Flow v1">
+    <mxGraphModel dx="1191" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="actor_user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Engineer / User" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sys_ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="SentinelAI UI (React)&#xa;- paste log / upload file&#xa;- show RCA + errors" vertex="1">
+          <mxGeometry height="90" width="260" x="40" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="sys_core" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="SentinelAI-Core (Spring Boot)&#xa;Orchestrator + APIs + RAG retrieval" vertex="1">
+          <mxGeometry height="580" width="520" x="340" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sys_engine" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="SentinelAI-Engine (FastAPI)&#xa;Agent runtime + Provider routing" vertex="1">
+          <mxGeometry height="580" width="460" x="900" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="core_api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="Core APIs (Tools)&#xa;- POST /api/rca/analyze&#xa;- POST /api/logs/search&#xa;- POST /api/logs/upload&#xa;- POST /api/rca/jira (optional)" vertex="1">
+          <mxGeometry height="150" width="460" x="370" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="core_retrieval" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="Retrieval Layer (RAG)&#xa;- EmbeddingClient (default: Ollama)&#xa;- VectorSimilaritySearch (pluggable)&#xa;Config: sentinelai.semantic-search.enabled" vertex="1">
+          <mxGeometry height="130" width="460" x="370" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="core_store" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="PostgreSQL (pgvector image)&#xa;- incidents + embeddings&#xa;- metadata (future)&#xa;host: localhost:5111" vertex="1">
+          <mxGeometry height="130" width="260" x="600" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="core_ollama" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Ollama (optional)&#xa;Embeddings endpoint&#xa;host: localhost:11434" vertex="1">
+          <mxGeometry height="110" width="260" x="350" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="Agent Endpoint&#xa;POST /agent/analyze (proposed)&#xa;Input: log + optional constraints" vertex="1">
+          <mxGeometry height="110" width="420" x="920" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_loop" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="Agent Loop&#xa;1) Plan steps&#xa;2) Call tools (Core APIs)&#xa;3) Synthesize RCA JSON&#xa;4) Validate + retry if needed" vertex="1">
+          <mxGeometry height="140" width="420" x="920" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="provider_router" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="Provider Router&#xa;groq | ollama | huggingface | ..." vertex="1">
+          <mxGeometry height="80" width="420" x="920" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="providers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="LLM Providers&#xa;- Groq (cloud)&#xa;- Ollama (local)&#xa;- HuggingFace (cloud)&#xa;- OpenAI (future)" vertex="1">
+          <mxGeometry height="140" width="420" x="920" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="jira" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Jira (optional)&#xa;Ticket creation API" vertex="1">
+          <mxGeometry height="90" width="260" x="40" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="e_user_ui" edge="1" parent="1" source="actor_user" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="sys_ui" value="submit logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ui_core" edge="1" parent="1" source="sys_ui" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="core_api" value="POST /api/rca/analyze">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_core_api_retrieval" edge="1" parent="1" source="core_api" style="endArrow=block;html=1;strokeColor=#82b366;" target="core_retrieval" value="(optional) retrieval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_retrieval_db" edge="1" parent="1" source="core_retrieval" style="endArrow=block;html=1;strokeColor=#d6b656;" target="core_store" value="store/search vectors">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_retrieval_ollama" edge="1" parent="1" source="core_retrieval" style="endArrow=block;html=1;strokeColor=#9673a6;" target="core_ollama" value="embed() default">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_core_engine" edge="1" parent="1" source="core_api" style="endArrow=block;html=1;strokeColor=#b85450;" target="agent_entry" value="call agent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_agent_tools" edge="1" parent="1" source="agent_loop" style="endArrow=block;html=1;strokeColor=#b85450;dashed=1;" target="core_api" value="tool calls: search/upload/jira">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_agent_router" edge="1" parent="1" source="agent_loop" style="endArrow=block;html=1;strokeColor=#b85450;" target="provider_router" value="select provider">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_router_providers" edge="1" parent="1" source="provider_router" style="endArrow=block;html=1;strokeColor=#b85450;" target="providers" value="LLM call(s)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_core_jira" edge="1" parent="1" source="core_api" style="endArrow=block;html=1;strokeColor=#9673a6;dashed=1;" target="jira" value="POST /api/rca/jira (optional)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_core_ui_return" edge="1" parent="1" source="core_api" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="sys_ui" value="RCA JSON + errors[]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

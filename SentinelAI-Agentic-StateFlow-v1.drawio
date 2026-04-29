@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="sentinelai-agentic-stateflow-v1" name="SentinelAI Agentic State Flow v1">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Start/End -->
+        <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="START&#xa;RCA request" vertex="1">
+          <mxGeometry height="70" width="120" x="40" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ok" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="END&#xa;Return RCA" vertex="1">
+          <mxGeometry height="70" width="140" x="1180" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="end_fail" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="END&#xa;Return errors" vertex="1">
+          <mxGeometry height="70" width="150" x="1180" y="220" as="geometry" />
+        </mxCell>
+
+        <!-- States -->
+        <mxCell id="state_intake" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="State: INTAKE&#xa;Normalize input&#xa;- log text&#xa;- constraints (service/time/env)&#xa;- provider preference" vertex="1">
+          <mxGeometry height="110" width="260" x="210" y="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_plan" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="State: PLAN&#xa;Decide next steps&#xa;- need live logs?&#xa;- need retrieval?&#xa;- need Jira draft?" vertex="1">
+          <mxGeometry height="110" width="260" x="500" y="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_live_logs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Tool: LIVE LOG SEARCH (Core)&#xa;/api/live/search (proposed)&#xa;Filters: service/container, env, time range" vertex="1">
+          <mxGeometry height="110" width="310" x="500" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_retrieve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Tool: INCIDENT RETRIEVAL (Core)&#xa;/api/logs/search&#xa;Vector similarity (pluggable)&#xa;May be disabled by config" vertex="1">
+          <mxGeometry height="110" width="310" x="500" y="360" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_pack" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="State: EVIDENCE PACK&#xa;Build compact context&#xa;- top errors + patterns&#xa;- representative snippets&#xa;- retrieved incidents + fixes" vertex="1">
+          <mxGeometry height="120" width="300" x="840" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_generate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="State: GENERATE RCA&#xa;Call AI-Engine provider&#xa;/analyze?provider=...&#xa;Output: RCA JSON" vertex="1">
+          <mxGeometry height="110" width="300" x="840" y="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_validate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="State: VALIDATE&#xa;- JSON schema check&#xa;- required fields present&#xa;- add errors[] if needed&#xa;- retry budget" vertex="1">
+          <mxGeometry height="120" width="300" x="840" y="360" as="geometry" />
+        </mxCell>
+
+        <mxCell id="state_action" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="State: OPTIONAL ACTIONS&#xa;- Draft Jira&#xa;- Create Jira (approval)&#xa;/api/rca/jira" vertex="1">
+          <mxGeometry height="110" width="300" x="840" y="510" as="geometry" />
+        </mxCell>
+
+        <!-- Decision diamonds -->
+        <mxCell id="dec_live" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="Need live logs?" vertex="1">
+          <mxGeometry height="80" width="160" x="680" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_retr" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="Need retrieval?" vertex="1">
+          <mxGeometry height="80" width="160" x="680" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_valid" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="Valid RCA?" vertex="1">
+          <mxGeometry height="80" width="150" x="1060" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_retry" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" value="Retry left?" vertex="1">
+          <mxGeometry height="80" width="150" x="1060" y="470" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" edge="1" parent="1" source="start" target="state_intake" style="endArrow=block;html=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="state_intake" target="state_plan" style="endArrow=block;html=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e3" edge="1" parent="1" source="state_plan" target="dec_live" style="endArrow=block;html=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4_yes" edge="1" parent="1" source="dec_live" target="state_live_logs" style="endArrow=block;html=1;strokeColor=#d6b656;" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4_no" edge="1" parent="1" source="dec_live" target="dec_retr" style="endArrow=block;html=1;strokeColor=#6c8ebf;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e5" edge="1" parent="1" source="state_live_logs" target="dec_retr" style="endArrow=block;html=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e6_yes" edge="1" parent="1" source="dec_retr" target="state_retrieve" style="endArrow=block;html=1;strokeColor=#d6b656;" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6_no" edge="1" parent="1" source="dec_retr" target="state_pack" style="endArrow=block;html=1;strokeColor=#6c8ebf;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" edge="1" parent="1" source="state_retrieve" target="state_pack" style="endArrow=block;html=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e8" edge="1" parent="1" source="state_pack" target="state_generate" style="endArrow=block;html=1;strokeColor=#b85450;" value="prompt + evidence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e9" edge="1" parent="1" source="state_generate" target="state_validate" style="endArrow=block;html=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e10" edge="1" parent="1" source="state_validate" target="dec_valid" style="endArrow=block;html=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11_yes" edge="1" parent="1" source="dec_valid" target="end_ok" style="endArrow=block;html=1;strokeColor=#82b366;" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11_no" edge="1" parent="1" source="dec_valid" target="dec_retry" style="endArrow=block;html=1;strokeColor=#b85450;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12_yes" edge="1" parent="1" source="dec_retry" target="state_plan" style="endArrow=block;html=1;strokeColor=#b85450;" value="Yes (refine)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12_no" edge="1" parent="1" source="dec_retry" target="end_fail" style="endArrow=block;html=1;strokeColor=#b85450;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

@@ -37,6 +37,7 @@ sentinelai:
   semantic-search:
     # Uses Spring AI EmbeddingModel (Ollama) to fetch similar historical incidents.
     # Set to false if you don't have Ollama running locally.
+    # Vector similarity search implementation is pluggable (in-memory now; Qdrant/pgvector later).
     enabled: true
   jira:
     base-url: https://your-domain.atlassian.net/ # Change to your Jira instance URL

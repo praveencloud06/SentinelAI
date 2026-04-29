@@ -1,23 +1,19 @@
 package com.sentinel.ai.service;
 
 import com.sentinel.ai.dto.LogSearchResult;
-import com.sentinel.ai.model.KnowledgeBaseEntry;
-import com.sentinel.ai.repository.KnowledgeBaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
+import com.sentinel.ai.vector.VectorSimilaritySearch;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SemanticSearchService {
     private static final Logger logger = LoggerFactory.getLogger(SemanticSearchService.class);
-    private final EmbeddingModel embeddingModel;
-    private final KnowledgeBaseRepository knowledgeBaseRepository;
+    private final VectorSimilaritySearch vectorSimilaritySearch;
 
     /**
      * Performs semantic search over stored logs.
@@ -37,38 +33,6 @@ public class SemanticSearchService {
      */
     public List<LogSearchResult> search(String query, int topK) {
         logger.info("Semantic search for query: {}", query);
-
-        // AI call: vectorize the user's query using the configured embedding model in Ollama.
-        float[] queryEmbedding = embeddingModel.embed(query);
-
-        // Fetch stored embeddings from the knowledge base.
-        List<KnowledgeBaseEntry> allEntries = knowledgeBaseRepository.findAll();
-
-        // Compute similarity in-memory and return the best matches.
-        List<LogSearchResult> results = allEntries.stream()
-                .map(entry -> new LogSearchResult(
-                        entry.getLogText(),
-                        entry.getResolutionNotes(),
-                        cosineSimilarity(queryEmbedding, entry.getEmbedding())
-                ))
-                .sorted(Comparator.comparingDouble(LogSearchResult::getSimilarity).reversed())
-                .limit(topK)
-                .collect(Collectors.toList());
-        return results;
-    }
-
-    /**
-     * Standard cosine similarity for two vectors.
-     * Result ranges from -1..1, where 1 means "same direction" (very similar) and 0 means unrelated.
-     */
-    private double cosineSimilarity(float[] a, float[] b) {
-        if (a == null || b == null || a.length != b.length) return 0.0;
-        double dot = 0.0, normA = 0.0, normB = 0.0;
-        for (int i = 0; i < a.length; i++) {
-            dot += a[i] * b[i];
-            normA += a[i] * a[i];
-            normB += b[i] * b[i];
-        }
-        return (normA == 0 || normB == 0) ? 0.0 : dot / (Math.sqrt(normA) * Math.sqrt(normB));
+        return vectorSimilaritySearch.search(query, topK);
     }
 }
