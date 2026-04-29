@@ -28,6 +28,12 @@ public class RCAService {
     @Value("${sentinelai.semantic-search.enabled:true}")
     private boolean semanticSearchEnabled;
 
+    @Value("${sentinelai.limits.max-log-chars:20000}")
+    private int maxLogChars;
+
+    @Value("${sentinelai.limits.max-prompt-chars:30000}")
+    private int maxPromptChars;
+
     /**
      * Runs a Root Cause Analysis (RCA) workflow by delegating RCA generation to the Python AI Engine.
      *
@@ -49,13 +55,20 @@ public class RCAService {
      */
     public RCAResponse analyze(String log) {
         logger.info("RCA analysis for log");
+        List<String> limitWarnings = new ArrayList<>();
+
+        String safeLog = log == null ? "" : log;
+        if (safeLog.length() > maxLogChars) {
+            limitWarnings.add("Input log truncated to " + maxLogChars + " characters");
+            safeLog = safeLog.substring(0, maxLogChars);
+        }
 
         // 1) RETRIEVE: get the top 3 most similar logs to build context (past incidents).
         // This uses embeddings + cosine similarity (semantic similarity).
         List<KnowledgeBaseEntry> similar = Collections.emptyList();
         if (semanticSearchEnabled) {
             try {
-                similar = semanticSearchService.search(log, 3).stream()
+                similar = semanticSearchService.search(safeLog, 3).stream()
                         .map(result -> knowledgeBaseRepository.findAll().stream()
                                 .filter(e -> e.getLogText().equals(result.getLogText()))
                                 .findFirst().orElse(null))
@@ -78,14 +91,25 @@ public class RCAService {
         // Business intent: LLM proposes RCA based on patterns seen in previous incidents (and general knowledge),
         // while grounding the response with your own historical context.
         String promptText = "Given the following log and similar past incidents, analyze and return a JSON with keys: issue, rootCause, impactedService, recommendedFix.\n" +
-                "Log to analyze: " + log + "\n" +
+                "Log to analyze: " + safeLog + "\n" +
                 "Similar incidents:\n" + context;
+
+        if (promptText.length() > maxPromptChars) {
+            limitWarnings.add("Prompt truncated to " + maxPromptChars + " characters");
+            promptText = promptText.substring(0, maxPromptChars);
+        }
 
         // AI call: delegate RCA generation to the Python AI Engine (FastAPI) so we can switch providers there.
         String response = pythonAiMlService.analyzeLogWithAI(promptText);
 
         // For MVP, parse manually (should use a JSON parser in production).
-        return parseRCAResponse(response);
+        RCAResponse parsed = parseRCAResponse(response);
+        if (!limitWarnings.isEmpty()) {
+            List<String> merged = new ArrayList<>(parsed.getErrors() == null ? List.of() : parsed.getErrors());
+            merged.addAll(limitWarnings);
+            parsed.setErrors(merged);
+        }
+        return parsed;
     }
 
     private RCAResponse parseRCAResponse(String response) {

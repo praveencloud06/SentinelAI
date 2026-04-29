@@ -29,6 +29,10 @@ logging:
 
 # Custom application properties
 sentinelai:
+  limits:
+    # Protects providers (e.g., Groq) from oversized requests.
+    max-log-chars: 2000
+    max-prompt-chars: 3000
   ai-engine:
     # FastAPI engine endpoint (see SentinelAI-AI-Engine)
     url: http://localhost:8000/analyze

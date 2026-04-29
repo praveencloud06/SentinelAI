@@ -31,6 +31,9 @@ logging:
 
 # Custom application properties
 sentinelai:
+  limits:
+    max-log-chars: 20000
+    max-prompt-chars: 30000
   ai-engine:
     url: http://localhost:8000/analyze
     provider: groq
