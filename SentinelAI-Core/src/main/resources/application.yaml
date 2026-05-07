@@ -1,4 +1,12 @@
 spring:
+  # Disable Spring Boot's Elasticsearch auto-configuration globally.
+  # ElkConfig creates the client manually, conditioned on sentinelai.elk.enabled=true.
+  # This prevents startup failures when Elasticsearch is not running locally.
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
   datasource:
     # If running Spring Boot on your host:
     url: jdbc:postgresql://localhost:5111/sentinelai
@@ -43,7 +51,17 @@ sentinelai:
     # Set to false if you don't have Ollama running locally.
     # Vector similarity search implementation is pluggable (in-memory now; Qdrant/pgvector later).
     enabled: true
+  # ── ELK Investigation ────────────────────────────────────────────────────────
+  # Enabled by default for local development.
+  # Override enabled: false in environment-specific config for non-dev deployments.
+  elk:
+    enabled: true
+    url: http://localhost:9200
+    index: logs-application
+    # Maximum number of log documents fetched per investigation request.
+    # Keeps AI prompts within token limits.
+    max-log-results: 50
   jira:
-    base-url: https://your-domain.atlassian.net/ # Change to your Jira instance URL
-    username: <jira-username>
+    base-url: https://praveend06.atlassian.net/ # Change to your Jira instance URL
+    username: praveend06@gmail.com
     api-token: <jira-api-token>

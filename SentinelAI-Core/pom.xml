@@ -72,6 +72,15 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.17</version>
 		</dependency>
+
+		<!-- ── ELK Investigation feature ──────────────────────────────────────── -->
+		<!-- Spring Data Elasticsearch (imperative client, ES 8.x compatible).    -->
+		<!-- Auto-configuration is excluded in application.yaml; ElkConfig        -->
+		<!-- creates the client conditionally on sentinelai.elk.enabled=true.     -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

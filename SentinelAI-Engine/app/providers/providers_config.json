@@ -4,7 +4,7 @@
     "model": "facebook/bart-large-cnn"
   },
   "groq": {
-    "api_key": "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",
+    "api_key": "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",
     "model": "llama-3.3-70b-versatile"
   },
   "bedrock": {

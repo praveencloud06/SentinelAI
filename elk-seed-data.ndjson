@@ -1,0 +1,30 @@
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:00:00.000Z","service":"payment-service","severity":"ERROR","message":"Kafka timeout while processing invoice INV-8821 – consumer group lag exceeded 5000","traceId":"abc001","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:01:15.000Z","service":"payment-service","severity":"ERROR","message":"Database connection pool exhausted – all 20 connections in use (pool: payment-db-pool)","traceId":"abc002","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:02:30.000Z","service":"payment-service","severity":"ERROR","message":"Failed to publish event PAYMENT_PROCESSED to topic payments.events – broker unavailable","traceId":"abc003","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:03:45.000Z","service":"payment-service","severity":"WARN","message":"Retry attempt 3/5 for Kafka producer – backing off 2000ms","traceId":"abc003","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:04:00.000Z","service":"payment-service","severity":"ERROR","message":"NullPointerException in PaymentProcessor.processInvoice() at line 147 – invoice object is null","traceId":"abc004","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:05:10.000Z","service":"payment-service","severity":"ERROR","message":"Circuit breaker OPEN for downstream service billing-service after 10 consecutive failures","traceId":"abc005","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:06:00.000Z","service":"payment-service","severity":"WARN","message":"Response time 4520ms exceeds SLA threshold of 2000ms for endpoint POST /payments/process","traceId":"abc006","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:07:00.000Z","service":"payment-service","severity":"ERROR","message":"Transaction rollback triggered – constraint violation on table payment_transactions (unique idx: txn_ref)","traceId":"abc007","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:08:00.000Z","service":"payment-service","severity":"INFO","message":"Health check passed – DB OK, Kafka DEGRADED, Cache OK","traceId":"abc008","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:09:00.000Z","service":"payment-service","severity":"ERROR","message":"Kafka consumer poll returned empty for 30s – possible broker partition rebalance in progress","traceId":"abc009","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:00:30.000Z","service":"order-service","severity":"ERROR","message":"Failed to call payment-service: Connection refused at http://payment-service:8081/payments/process","traceId":"def001","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:01:45.000Z","service":"order-service","severity":"WARN","message":"Order ORD-4492 stuck in PENDING_PAYMENT state for 90 seconds – scheduling for retry","traceId":"def002","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:03:00.000Z","service":"order-service","severity":"ERROR","message":"Max retry attempts reached for order ORD-4492 – marking as FAILED","traceId":"def002","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:05:00.000Z","service":"auth-service","severity":"WARN","message":"JWT validation failed – token expired (exp=2026-05-07T08:55:00Z) for user user@example.com","traceId":"ghi001","environment":"local"}
+{ "index": { "_index": "logs-application" } }
+{"timestamp":"2026-05-07T09:06:30.000Z","service":"auth-service","severity":"INFO","message":"Token refresh issued for user user@example.com – new expiry 2026-05-07T10:06:30Z","traceId":"ghi002","environment":"local"}

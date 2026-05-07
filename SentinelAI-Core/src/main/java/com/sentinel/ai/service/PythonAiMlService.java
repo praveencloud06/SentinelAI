@@ -65,8 +65,9 @@ public class PythonAiMlService {
                     ? ("AI Engine HTTP " + ex.getRawStatusCode())
                     : body;
         } catch (Exception ex) {
-            logger.error("AI Engine call failed: {}", ex.getMessage());
-            return "AI Engine error: " + ex.getMessage();
+            String msg = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName();
+            logger.error("AI Engine call failed: {}", msg, ex);
+            return "AI Engine error: " + msg;
         }
     }
 }

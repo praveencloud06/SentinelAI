@@ -1,5 +1,6 @@
 package com.sentinel.ai.exception;
 
+import com.sentinel.ai.elk.exception.ElkInvestigationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.retry.NonTransientAiException;
@@ -16,8 +17,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NonTransientAiException.class)
     @ResponseBody
-    public ResponseEntity<String> handleNonTransientAiException(NonTransientAiException ex) {
-        logger.error("AI provider error: ", ex);
+    public ResponseEntity<String> handleNonTransientAiException(NonTransientAiException ex) {        logger.error("AI provider error: ", ex);
         String hint = "Ollama model not available. Pull it first (Docker): `docker exec -it sentinelai-ollama ollama pull llama3` " +
                 "or update `spring.ai.ollama.chat.model` / `spring.ai.ollama.embedding.model` in `src/main/resources/application.yaml`.";
         return new ResponseEntity<>(hint + " Details: " + ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
@@ -28,6 +28,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleHttpClientErrorException(HttpClientErrorException ex) {
         logger.error("HTTP client error: ", ex);
         return new ResponseEntity<>("Upstream HTTP error: " + ex.getStatusCode() + " - " + ex.getResponseBodyAsString(), HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(ElkInvestigationException.class)
+    @ResponseBody
+    public ResponseEntity<String> handleElkInvestigationException(ElkInvestigationException ex) {
+        logger.error("ELK investigation error: ", ex);
+        return new ResponseEntity<>("ELK investigation failed: " + ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(Exception.class)

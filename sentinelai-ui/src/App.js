@@ -1,6 +1,47 @@
 import React, { useState } from 'react';
+import ElkInvestigationPage from './ElkInvestigationPage';
 
-function App() {
+// ── Navigation styles ──────────────────────────────────────────────────────
+const navStyles = {
+  wrapper: {
+    fontFamily: "'Segoe UI', Arial, sans-serif",
+    minHeight: '100vh',
+    background: '#f5f7fa',
+  },
+  nav: {
+    background: '#1a1a2e',
+    padding: '0 32px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 0,
+    boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
+  },
+  brand: {
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: 18,
+    marginRight: 32,
+    letterSpacing: 0.5,
+    padding: '16px 0',
+  },
+  tab: (active) => ({
+    padding: '16px 20px',
+    cursor: 'pointer',
+    color: active ? '#fff' : '#aab',
+    fontWeight: active ? 700 : 400,
+    fontSize: 14,
+    borderBottom: active ? '3px solid #4fc3f7' : '3px solid transparent',
+    userSelect: 'none',
+    transition: 'color 0.15s',
+    background: 'none',
+    border: 'none',
+    borderBottom: active ? '3px solid #4fc3f7' : '3px solid transparent',
+  }),
+  content: { maxWidth: 760, margin: '32px auto', padding: '0 16px' },
+};
+
+// ── Existing RCA page (unchanged logic, restyled wrapper) ──────────────────
+function RcaPage() {
   const [logText, setLogText] = useState('');
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
@@ -63,7 +104,7 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: 24, border: '1px solid #eee', borderRadius: 8 }}>
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: 24, border: '1px solid #eee', borderRadius: 8, background: '#fff' }}>
       <h2>SentinelAI Log RCA</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 16 }}>
@@ -99,4 +140,44 @@ function App() {
   );
 }
 
+// ── App shell with navigation ──────────────────────────────────────────────
+const PAGES = {
+  rca: 'rca',
+  elk: 'elk',
+};
+
+function App() {
+  const [activePage, setActivePage] = useState(PAGES.rca);
+
+  return (
+    <div style={navStyles.wrapper}>
+      {/* Top navigation bar */}
+      <nav style={navStyles.nav}>
+        <span style={navStyles.brand}>SentinelAI</span>
+
+        <button
+          style={navStyles.tab(activePage === PAGES.rca)}
+          onClick={() => setActivePage(PAGES.rca)}
+        >
+          Log RCA
+        </button>
+
+        <button
+          style={navStyles.tab(activePage === PAGES.elk)}
+          onClick={() => setActivePage(PAGES.elk)}
+        >
+          ELK Investigation
+        </button>
+      </nav>
+
+      {/* Page content */}
+      <div style={navStyles.content}>
+        {activePage === PAGES.rca && <RcaPage />}
+        {activePage === PAGES.elk && <ElkInvestigationPage />}
+      </div>
+    </div>
+  );
+}
+
 export default App;
+
