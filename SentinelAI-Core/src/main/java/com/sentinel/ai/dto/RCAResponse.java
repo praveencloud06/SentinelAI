@@ -16,4 +16,14 @@ public class RCAResponse {
     private String recommendedFix;
     private String provider;
     private List<String> errors;
+    private EngineeringContextResponse engineeringContext;
+
+    public RCAResponse(String issue, String rootCause, String impactedService, String recommendedFix, String provider, List<String> errors) {
+        this.issue = issue;
+        this.rootCause = rootCause;
+        this.impactedService = impactedService;
+        this.recommendedFix = recommendedFix;
+        this.provider = provider;
+        this.errors = errors;
+    }
 }

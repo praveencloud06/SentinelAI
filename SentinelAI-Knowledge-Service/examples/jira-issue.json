@@ -1,0 +1,35 @@
+{
+  "issue": {
+    "key": "PAY-221",
+    "fields": {
+      "project": {
+        "key": "PAY"
+      },
+      "summary": "Payment gateway retry timeout failures",
+      "issuetype": {
+        "name": "Bug"
+      },
+      "status": {
+        "name": "Done"
+      },
+      "assignee": {
+        "displayName": "SentinelAI Engineer"
+      },
+      "fixVersions": [
+        {
+          "name": "v1.8.2"
+        }
+      ],
+      "labels": [
+        "payment",
+        "gateway"
+      ],
+      "components": [
+        {
+          "name": "payment-service"
+        }
+      ],
+      "updated": "2026-07-07T10:20:00Z"
+    }
+  }
+}

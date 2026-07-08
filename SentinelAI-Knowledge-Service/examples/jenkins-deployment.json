@@ -1,0 +1,12 @@
+{
+  "build": {
+    "number": "145",
+    "status": "SUCCESS",
+    "durationMs": "182000",
+    "environment": "staging",
+    "releaseVersion": "v1.8.2",
+    "commitRange": "abc000..abc123",
+    "jiraVersions": "v1.8.2",
+    "deployedAt": "2026-07-07T10:35:00Z"
+  }
+}

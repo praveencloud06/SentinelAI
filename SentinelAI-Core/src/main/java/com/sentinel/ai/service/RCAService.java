@@ -1,5 +1,6 @@
 package com.sentinel.ai.service;
 
+import com.sentinel.ai.dto.EngineeringContextResponse;
 import com.sentinel.ai.dto.RCAResponse;
 import com.sentinel.ai.model.KnowledgeBaseEntry;
 import com.sentinel.ai.repository.KnowledgeBaseRepository;
@@ -24,6 +25,7 @@ public class RCAService {
     private final KnowledgeBaseRepository knowledgeBaseRepository;
     private final SemanticSearchService semanticSearchService;
     private final PythonAiMlService pythonAiMlService;
+    private final KnowledgeServiceClient knowledgeServiceClient;
 
     @Value("${sentinelai.semantic-search.enabled:true}")
     private boolean semanticSearchEnabled;
@@ -86,13 +88,17 @@ public class RCAService {
             context.append("Resolution: ").append(entry.getResolutionNotes()).append("\n---\n");
         }
 
+        EngineeringContextResponse engineeringContext = knowledgeServiceClient.fetchContext(safeLog);
+        String engineeringPromptContext = knowledgeServiceClient.toPromptContext(engineeringContext);
+
         // 2) GENERATE: create an instruction prompt for the LLM.
         // We include: (a) the log to analyze, (b) similar incidents + resolutions.
         // Business intent: LLM proposes RCA based on patterns seen in previous incidents (and general knowledge),
         // while grounding the response with your own historical context.
-        String promptText = "Given the following log and similar past incidents, analyze and return a JSON with keys: issue, rootCause, impactedService, recommendedFix.\n" +
+        String promptText = "Given the following log, similar past incidents, and engineering context, analyze and return a JSON with keys: issue, rootCause, impactedService, recommendedFix.\n" +
                 "Log to analyze: " + safeLog + "\n" +
-                "Similar incidents:\n" + context;
+                "Similar incidents:\n" + context + "\n" +
+                "Engineering context from SentinelAI Knowledge Service:\n" + engineeringPromptContext;
 
         if (promptText.length() > maxPromptChars) {
             limitWarnings.add("Prompt truncated to " + maxPromptChars + " characters");
@@ -104,6 +110,7 @@ public class RCAService {
 
         // For MVP, parse manually (should use a JSON parser in production).
         RCAResponse parsed = parseRCAResponse(response);
+        parsed.setEngineeringContext(engineeringContext);
         if (!limitWarnings.isEmpty()) {
             List<String> merged = new ArrayList<>(parsed.getErrors() == null ? List.of() : parsed.getErrors());
             merged.addAll(limitWarnings);

@@ -51,6 +51,12 @@ sentinelai:
     # Set to false if you don't have Ollama running locally.
     # Vector similarity search implementation is pluggable (in-memory now; Qdrant/pgvector later).
     enabled: true
+  knowledge-service:
+    # Disabled by default so RCA continues to work without the SKS microservice.
+    enabled: ${SENTINELAI_KNOWLEDGE_SERVICE_ENABLED:false}
+    url: ${SENTINELAI_KNOWLEDGE_SERVICE_URL:http://localhost:8090}
+    max-timeline-events: ${SENTINELAI_KNOWLEDGE_SERVICE_MAX_TIMELINE_EVENTS:20}
+    request-timeout-ms: ${SENTINELAI_KNOWLEDGE_SERVICE_TIMEOUT_MS:3000}
   # ── ELK Investigation ────────────────────────────────────────────────────────
   # Enabled by default for local development.
   # Override enabled: false in environment-specific config for non-dev deployments.

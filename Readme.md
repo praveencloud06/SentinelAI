@@ -7,6 +7,35 @@ SentinelAI helps engineers understand logs and incidents by combining:
 
 This repo contains three deployable parts (UI, Core, AI-Engine) plus Docker compose files for local infra.
 
+## What makes it different
+The category we are building in is called AIOps (Artificial Intelligence for IT Operations) or Autonomous Incident Remediation. 
+Existing Solutions in the Market
+Datadog & Dynatrace: They have "AI-powered RCA," but it is often closed-source, heavily dependent on their own platform agents, and expensive.
+PagerDuty & BigPanda: They excel at incident correlation (grouping alerts together), but their automated remediation and deep log parsing via LLMs are still evolving.
+Kubiya / Anyscale / LangChain-based Agents: Open-source and startup tools that build specialized software engineering "AI Agents" to write fixes or query infrastructure.
+
+What makes your current implementation different?
+Vendor Agnosticism: Datadog forces you to keep your logs inside Datadog. Your project sits on top of open-source components (ELK, Postgres) and can swap LLM backends seamlessly.Hybrid Local/Cloud Design: Using Groq for speed while maintaining an immediate fallback to an onsite Ollama model solves a massive compliance problem for enterprise companies who refuse to leak sensitive application log files to public clouds.
+
+What "Brand New" things can you add
+                  ┌───────────────────────┐
+                  │   Kafka Event Bus     │
+                  └───────────┬───────────┘
+                              │ Live Stream
+                              ▼
+┌───────────────────────────────────────────────────────────┐
+│              SentinelAI - Advanced AI Layer               │
+│                                                           │
+│  ┌─────────────────────────┐   ┌───────────────────────┐  │
+│  │ 1. Vector Time-Slicing │   │ 2. Predictive Blast   │  │
+│  │    (Log Chronology)     │   │    Radius Analysis    │  │
+│  └─────────────────────────┘   └───────────────────────┘  │
+│  ┌─────────────────────────┐   ┌───────────────────────┐  │
+│  │ 3. Automated Git Patch  │   │ 4. Deterministic Guard │  │
+│  │    Generation (PRs)     │   │    (No-Hallucination) │  │
+│  └─────────────────────────┘   └───────────────────────┘  │
+└───────────────────────────────────────────────────────────┘
+
 ## Components
 
 - **`SentinelAI/sentinelai-ui` (React)**

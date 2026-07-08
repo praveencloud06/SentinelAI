@@ -1,0 +1,590 @@
+SentinelAI Engineering Intelligence Service - Development Prompt
+You are a Principal Software Architect and Senior Backend Engineer.
+
+Your task is to design and implement a new Spring Boot microservice called
+
+Engineering Intelligence Service (EIS)
+
+This service is a completely independent microservice inside SentinelAI.
+
+DO NOT modify existing RCA services.
+
+The objective is NOT to perform Root Cause Analysis.
+
+The objective is to continuously build Engineering Intelligence by synchronizing engineering metadata from multiple enterprise systems.
+
+This service will later be consumed by the existing RCA pipeline.
+
+==================================================
+TECH STACK
+==================================================
+
+Java 21
+
+Spring Boot 3.x
+
+Spring AI
+
+Spring Data JPA
+
+Spring WebFlux (where useful)
+
+PostgreSQL
+
+pgvector
+
+Redis
+
+Kafka
+
+OpenFeign
+
+Docker
+
+Maven
+
+==================================================
+FIRST PHASE SCOPE
+==================================================
+
+Integrate ONLY these systems.
+
+GitHub / GitLab
+
+Jira
+
+Confluence
+
+Jenkins
+
+No Slack.
+
+No Teams.
+
+No Kubernetes.
+
+No Elastic.
+
+No AI Agents yet.
+
+No LangGraph.
+
+No Knowledge Graph.
+
+Keep architecture extensible.
+
+==================================================
+HIGH LEVEL GOAL
+==================================================
+
+Continuously synchronize engineering metadata.
+
+Build an Engineering Knowledge Index.
+
+This is NOT another Git database.
+
+Git remains source of truth.
+
+Only engineering metadata and AI enrichment should be stored.
+
+==================================================
+MODULES
+==================================================
+
+1. Git Sync
+
+Sync repositories.
+
+Repository metadata.
+
+Commits.
+
+Pull Requests.
+
+Releases.
+
+Tags.
+
+Contributors.
+
+Changed files metadata.
+
+Do NOT store source code.
+
+Store only commit metadata.
+
+Store commit hash.
+
+Store PR number.
+
+Store repository.
+
+Store commit message.
+
+Store commit timestamp.
+
+Store changed file paths.
+
+Store release version.
+
+Support webhook events.
+
+Support full initial synchronization.
+
+Support incremental synchronization.
+
+==================================================
+
+2. Jira Sync
+
+Synchronize
+
+Projects
+
+Epics
+
+Stories
+
+Tasks
+
+Bugs
+
+Sprint
+
+Release
+
+Labels
+
+Components
+
+Linked Issues
+
+Assignee
+
+Status History
+
+Fix Version
+
+==================================================
+
+3. Confluence Sync
+
+Synchronize
+
+Architecture documents
+
+ADR
+
+Runbooks
+
+API documentation
+
+RFC
+
+Technical documentation
+
+Store
+
+Page metadata
+
+Title
+
+Version
+
+Author
+
+Last modified
+
+Embedding placeholder
+
+==================================================
+
+4. Jenkins Sync
+
+Synchronize
+
+Builds
+
+Deployments
+
+Release version
+
+Environment
+
+Build status
+
+Build duration
+
+Deployment timestamp
+
+Git commit range
+
+Jira versions
+
+==================================================
+
+DATABASE DESIGN
+
+Create normalized entities.
+
+Repository
+
+CommitMetadata
+
+PullRequest
+
+Release
+
+JiraIssue
+
+ConfluenceDocument
+
+Deployment
+
+EngineeringEvent
+
+EngineeringRelationship
+
+Do NOT store code.
+
+==================================================
+
+ENGINEERING EVENT MODEL
+
+Every synchronization creates Engineering Events.
+
+Examples
+
+Commit Created
+
+PR Merged
+
+Story Closed
+
+Deployment Completed
+
+ADR Updated
+
+Release Published
+
+==================================================
+
+RELATIONSHIP MODEL
+
+Example
+
+Repository
+
+↓
+
+Commit
+
+↓
+
+Pull Request
+
+↓
+
+Jira
+
+↓
+
+Release
+
+↓
+
+Deployment
+
+↓
+
+Confluence ADR
+
+Relationships must be queryable.
+
+==================================================
+
+REST APIs
+
+GET /repositories
+
+GET /repositories/{id}
+
+GET /commits
+
+GET /commits/{hash}
+
+GET /jira/issues
+
+GET /deployments
+
+GET /releases
+
+GET /timeline
+
+GET /relationships
+
+POST /sync/github
+
+POST /sync/jira
+
+POST /sync/confluence
+
+POST /sync/jenkins
+
+POST /sync/all
+
+==================================================
+
+ENGINEERING TIMELINE
+
+Create unified engineering timeline.
+
+Example
+
+09:00 Story Approved
+
+09:30 PR Created
+
+10:00 PR Merged
+
+10:20 Jenkins Build
+
+10:35 Deployment
+
+10:40 Release
+
+Timeline should merge events from all systems.
+
+==================================================
+
+SEARCH
+
+Implement engineering search.
+
+Examples
+
+Find deployments for commit.
+
+Find Jira for commit.
+
+Find release for deployment.
+
+Find ADR for repository.
+
+Find all changes between releases.
+
+==================================================
+
+EXTENSIBILITY
+
+Design using Connector Pattern.
+
+EngineeringConnector
+
+GitConnector
+
+JiraConnector
+
+ConfluenceConnector
+
+JenkinsConnector
+
+Future connectors
+
+Slack
+
+Teams
+
+Elastic
+
+Kubernetes
+
+Datadog
+
+Splunk
+
+Azure DevOps
+
+GitHub Actions
+
+==================================================
+
+ARCHITECTURE
+
+Use Hexagonal Architecture.
+
+Controller
+
+Application Service
+
+Domain
+
+Infrastructure
+
+Connector
+
+Repository
+
+Scheduler
+
+Configuration
+
+DTO
+
+Mapper
+
+==================================================
+
+BACKGROUND SYNCHRONIZATION
+
+Support
+
+Initial Sync
+
+Incremental Sync
+
+Webhook Event Processing
+
+Scheduled Synchronization
+
+Retry
+
+Dead Letter Queue
+
+==================================================
+
+NON FUNCTIONAL
+
+Stateless
+
+Scalable
+
+Multi Repository
+
+Multi Project
+
+Multi Tenant Ready
+
+Idempotent Synchronization
+
+Pagination
+
+Caching
+
+Metrics
+
+OpenTelemetry Ready
+
+==================================================
+
+DO NOT IMPLEMENT
+
+No AI reasoning.
+
+No Root Cause Analysis.
+
+No LangChain.
+
+No Agent.
+
+No Prompt Engineering.
+
+No Embeddings yet.
+
+No LLM integration.
+
+Only build Engineering Intelligence foundation.
+
+==================================================
+
+OUTPUT
+
+Generate production-quality code.
+
+Generate clean package structure.
+
+Generate entities.
+
+Generate services.
+
+Generate REST APIs.
+
+Generate DTOs.
+
+Generate repositories.
+
+Generate configuration.
+
+Generate Flyway migrations.
+
+Generate Docker support.
+
+Generate README.
+
+Use best practices.
+
+Write extensible code suitable for future AI reasoning integration.
+I would make one architectural change
+
+Instead of naming it Engineering Intelligence Service, I would name it:
+
+SentinelAI Knowledge Service (SKS)
+
+or
+
+Engineering Knowledge Service (EKS)
+
+Why?
+
+Because in the future, your architecture naturally becomes:
+
+                     SentinelAI Platform
+
+                    API Gateway
+                         │
+────────────────────────────────────────────────────────────
+
+RCA Service
+
+Knowledge Service
+
+AI Gateway Service
+
+Memory Service
+
+Agent Service
+
+Observability Service
+
+Notification Service
+
+Authentication Service
+
+UI
+
+Then the flow becomes:
+
+Elastic Alert
+      │
+      ▼
+RCA Service
+      │
+      ▼
+Engineering Knowledge Service
+      │
+      ├── Git
+      ├── Jira
+      ├── Confluence
+      └── Jenkins
+      ▼
+Context Bundle
+      ▼
+AI Gateway
+      ▼
+Evidence-Based RCA
+
+This separation of responsibilities is cleaner:
+
+Knowledge Service owns engineering context.
+RCA Service owns incident diagnosis.
+AI Gateway owns model interactions.

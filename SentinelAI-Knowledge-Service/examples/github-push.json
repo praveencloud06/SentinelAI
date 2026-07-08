@@ -1,0 +1,24 @@
+{
+  "repository": {
+    "full_name": "sentinelai/payment-service",
+    "name": "payment-service",
+    "default_branch": "main",
+    "html_url": "https://github.com/example/payment-service"
+  },
+  "commits": [
+    {
+      "id": "abc123",
+      "message": "PAY-221 add timeout guard for gateway retries",
+      "timestamp": "2026-07-07T10:00:00Z",
+      "author": {
+        "name": "SentinelAI Engineer",
+        "email": "engineer@example.com"
+      },
+      "added": [],
+      "modified": [
+        "src/main/java/com/example/payment/RetryPolicy.java"
+      ],
+      "removed": []
+    }
+  ]
+}

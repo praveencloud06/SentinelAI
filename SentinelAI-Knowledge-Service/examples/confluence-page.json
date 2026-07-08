@@ -1,0 +1,16 @@
+{
+  "page": {
+    "id": "987654",
+    "title": "ADR Payment Gateway Retry Policy",
+    "type": "page",
+    "version": {
+      "number": 4,
+      "when": "2026-07-07T10:30:00Z"
+    },
+    "lastUpdated": {
+      "by": {
+        "displayName": "SentinelAI Architect"
+      }
+    }
+  }
+}

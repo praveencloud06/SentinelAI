@@ -30,7 +30,6 @@ const navStyles = {
     color: active ? '#fff' : '#aab',
     fontWeight: active ? 700 : 400,
     fontSize: 14,
-    borderBottom: active ? '3px solid #4fc3f7' : '3px solid transparent',
     userSelect: 'none',
     transition: 'color 0.15s',
     background: 'none',
@@ -103,8 +102,29 @@ function RcaPage() {
     setLoading(false);
   };
 
+  const evidenceCount = (items) => Array.isArray(items) ? items.length : 0;
+
+  const renderEvidenceList = (title, items, getLabel) => {
+    if (!Array.isArray(items) || items.length === 0) {
+      return null;
+    }
+
+    return (
+      <div style={styles.evidenceGroup}>
+        <h4 style={styles.evidenceGroupTitle}>{title}</h4>
+        <ul style={styles.evidenceList}>
+          {items.slice(0, 5).map((item, index) => (
+            <li key={`${title}-${index}`} style={styles.evidenceItem}>
+              {getLabel(item)}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: 24, border: '1px solid #eee', borderRadius: 8, background: '#fff' }}>
+    <div style={{ maxWidth: 760, margin: '0 auto', padding: 24, border: '1px solid #eee', borderRadius: 8, background: '#fff' }}>
       <h2>SentinelAI Log RCA</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 16 }}>
@@ -133,12 +153,144 @@ function RcaPage() {
       {result && (
         <div style={{ marginTop: 32, background: '#f9f9f9', padding: 16, borderRadius: 6 }}>
           <h3>RCA Result</h3>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>
+          <div style={styles.resultGrid}>
+            <div style={styles.resultCard}>
+              <strong>Issue</strong>
+              <p>{result.issue || 'Not provided'}</p>
+            </div>
+            <div style={styles.resultCard}>
+              <strong>Root Cause</strong>
+              <p>{result.rootCause || 'Not provided'}</p>
+            </div>
+            <div style={styles.resultCard}>
+              <strong>Impacted Service</strong>
+              <p>{result.impactedService || 'Not provided'}</p>
+            </div>
+            <div style={styles.resultCard}>
+              <strong>Recommended Fix</strong>
+              <p>{result.recommendedFix || 'Not provided'}</p>
+            </div>
+          </div>
+
+          {result.engineeringContext && (
+            <div style={styles.evidencePanel}>
+              <div style={styles.evidenceHeader}>
+                <h3 style={{ margin: 0 }}>Engineering Evidence</h3>
+                <span style={{
+                  ...styles.statusPill,
+                  background: result.engineeringContext.available ? '#e7f7ee' : '#f5f5f5',
+                  color: result.engineeringContext.available ? '#176b3a' : '#666',
+                }}>
+                  {result.engineeringContext.enabled
+                    ? (result.engineeringContext.available ? 'SKS connected' : 'SKS unavailable')
+                    : 'SKS disabled'}
+                </span>
+              </div>
+              <p style={styles.evidenceMessage}>{result.engineeringContext.message}</p>
+              {result.engineeringContext.available && (
+                <>
+                  <div style={styles.evidenceStats}>
+                    <span>{evidenceCount(result.engineeringContext.timeline)} timeline events</span>
+                    <span>{evidenceCount(result.engineeringContext.deployments)} deployments</span>
+                    <span>{evidenceCount(result.engineeringContext.releases)} releases</span>
+                    <span>{evidenceCount(result.engineeringContext.jiraIssues)} Jira issues</span>
+                  </div>
+
+                  {renderEvidenceList('Timeline', result.engineeringContext.timeline, (item) =>
+                    `${item.occurredAt || ''} ${item.eventType || ''} ${item.title || ''}`
+                  )}
+                  {renderEvidenceList('Deployments', result.engineeringContext.deployments, (item) =>
+                    `${item.environment || 'environment'} ${item.releaseVersion || ''} ${item.buildStatus || ''}`
+                  )}
+                  {renderEvidenceList('Releases', result.engineeringContext.releases, (item) =>
+                    `${item.version || ''} ${item.repositoryName || ''}`
+                  )}
+                  {renderEvidenceList('Jira Issues', result.engineeringContext.jiraIssues, (item) =>
+                    `${item.issueKey || ''} ${item.status || ''} ${item.summary || ''}`
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {Array.isArray(result.errors) && result.errors.length > 0 && (
+            <div style={styles.errorList}>
+              <strong>Warnings</strong>
+              <ul>
+                {result.errors.map((item, index) => <li key={index}>{item}</li>)}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
+
+const styles = {
+  resultGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: 12,
+  },
+  resultCard: {
+    background: '#fff',
+    border: '1px solid #e5e7eb',
+    borderRadius: 8,
+    padding: 12,
+    minHeight: 92,
+  },
+  evidencePanel: {
+    marginTop: 18,
+    background: '#fff',
+    border: '1px solid #d9e2ec',
+    borderRadius: 8,
+    padding: 14,
+  },
+  evidenceHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  statusPill: {
+    borderRadius: 999,
+    padding: '4px 10px',
+    fontSize: 12,
+    fontWeight: 700,
+  },
+  evidenceMessage: {
+    margin: '8px 0 12px',
+    color: '#4b5563',
+  },
+  evidenceStats: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 12,
+  },
+  evidenceGroup: {
+    borderTop: '1px solid #edf2f7',
+    paddingTop: 10,
+    marginTop: 10,
+  },
+  evidenceGroupTitle: {
+    margin: '0 0 6px',
+  },
+  evidenceList: {
+    margin: 0,
+    paddingLeft: 18,
+  },
+  evidenceItem: {
+    marginBottom: 4,
+    color: '#253041',
+  },
+  errorList: {
+    marginTop: 16,
+    color: '#8a4b00',
+  },
+};
 
 // ── App shell with navigation ──────────────────────────────────────────────
 const PAGES = {
@@ -180,4 +332,3 @@ function App() {
 }
 
 export default App;
-

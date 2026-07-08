@@ -1,0 +1,6 @@
+com\sentinelai\knowledge\config\ExternalPlatformProperties$JiraPlatform.class
+com\sentinelai\knowledge\config\ExternalPlatformProperties$ConfluencePlatform.class
+com\sentinelai\knowledge\config\ExternalPlatformProperties$BasePlatform.class
+com\sentinelai\knowledge\config\ExternalPlatformProperties.class
+com\sentinelai\knowledge\config\ExternalPlatformProperties$JenkinsPlatform.class
+com\sentinelai\knowledge\config\ExternalPlatformProperties$GitPlatform.class

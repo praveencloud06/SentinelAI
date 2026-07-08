@@ -1,0 +1,11 @@
+package com.sentinelai.knowledge.domain;
+
+public enum RelationshipType {
+    REPOSITORY_CONTAINS_COMMIT,
+    COMMIT_IN_PULL_REQUEST,
+    PULL_REQUEST_LINKS_JIRA,
+    JIRA_FIXED_IN_RELEASE,
+    RELEASE_DEPLOYED,
+    REPOSITORY_DOCUMENTED_BY,
+    COMMIT_DEPLOYED
+}
