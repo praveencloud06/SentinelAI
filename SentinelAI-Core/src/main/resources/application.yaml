@@ -53,7 +53,7 @@ sentinelai:
     enabled: true
   knowledge-service:
     # Disabled by default so RCA continues to work without the SKS microservice.
-    enabled: ${SENTINELAI_KNOWLEDGE_SERVICE_ENABLED:false}
+    enabled: ${SENTINELAI_KNOWLEDGE_SERVICE_ENABLED:true}
     url: ${SENTINELAI_KNOWLEDGE_SERVICE_URL:http://localhost:8090}
     max-timeline-events: ${SENTINELAI_KNOWLEDGE_SERVICE_MAX_TIMELINE_EVENTS:20}
     request-timeout-ms: ${SENTINELAI_KNOWLEDGE_SERVICE_TIMEOUT_MS:3000}

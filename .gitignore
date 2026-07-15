@@ -5,3 +5,11 @@ SentinelAI-Core/.project
 /SentinelAI-Core/.settings
 /SentinelAI-Core/target
 /.vscode
+/SentinelAI-Knowledge-Service/target
+SentinelAI-Knowledge-Service/.classpath
+SentinelAI-Knowledge-Service/.factorypath
+SentinelAI-Knowledge-Service/.project
+/SentinelAI-Knowledge-Service/.settings
+/SentinelAI-Knowledge-Service/target
+/SentinelAI-Knowledge-Service/target
+*.class

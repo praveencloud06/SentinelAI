@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class DeploymentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "repository_id")
+    @JsonIgnore
     private RepositoryEntity repository;
 
     @Column(name = "release_version", length = 160)

@@ -4,7 +4,7 @@
     "model": "facebook/bart-large-cnn"
   },
   "groq": {
-    "api_key": "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",
+    "api_key": "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",
     "model": "llama-3.3-70b-versatile"
   },
   "bedrock": {
@@ -12,5 +12,9 @@
     "aws_secret_access_key": "YOUR_AWS_SECRET",
     "region": "us-east-1",
     "model": "anthropic.claude-v2"
+  },
+  "openrouter": {
+    "api_key": "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",
+    "model": "openai/gpt-oss-20b:free"
   }
 }

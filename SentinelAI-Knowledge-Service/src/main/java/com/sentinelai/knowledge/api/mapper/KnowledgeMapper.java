@@ -14,6 +14,7 @@ import com.sentinelai.knowledge.infrastructure.persistence.EngineeringRelationsh
 import com.sentinelai.knowledge.infrastructure.persistence.JiraIssueEntity;
 import com.sentinelai.knowledge.infrastructure.persistence.ReleaseEntity;
 import com.sentinelai.knowledge.infrastructure.persistence.RepositoryEntity;
+import org.hibernate.Hibernate;
 
 public final class KnowledgeMapper {
     private KnowledgeMapper() {
@@ -25,7 +26,13 @@ public final class KnowledgeMapper {
     }
 
     public static CommitResponse toResponse(CommitMetadataEntity entity) {
-        return new CommitResponse(entity.getHash(), entity.getRepository().getId(), entity.getRepository().getName(),
+        java.util.UUID repoId = null;
+        String repoName = null;
+        if (entity.getRepository() != null && Hibernate.isInitialized(entity.getRepository())) {
+            repoId = entity.getRepository().getId();
+            repoName = entity.getRepository().getName();
+        }
+        return new CommitResponse(entity.getHash(), repoId, repoName,
                 entity.getAuthorName(), entity.getAuthorEmail(), entity.getMessage(), entity.getCommittedAt(), entity.getChangedFiles());
     }
 
@@ -35,13 +42,24 @@ public final class KnowledgeMapper {
     }
 
     public static ReleaseResponse toResponse(ReleaseEntity entity) {
-        return new ReleaseResponse(entity.getId(), entity.getRepository().getId(), entity.getRepository().getName(),
+        java.util.UUID repoId = null;
+        String repoName = null;
+        if (entity.getRepository() != null && Hibernate.isInitialized(entity.getRepository())) {
+            repoId = entity.getRepository().getId();
+            repoName = entity.getRepository().getName();
+        }
+        return new ReleaseResponse(entity.getId(), repoId, repoName,
                 entity.getVersion(), entity.getTagName(), entity.getPublishedAt());
     }
 
     public static DeploymentResponse toResponse(DeploymentEntity entity) {
-        return new DeploymentResponse(entity.getId(), entity.getRepository() == null ? null : entity.getRepository().getId(),
-                entity.getRepository() == null ? null : entity.getRepository().getName(), entity.getReleaseVersion(), entity.getEnvironment(),
+        java.util.UUID repoId = null;
+        String repoName = null;
+        if (entity.getRepository() != null && Hibernate.isInitialized(entity.getRepository())) {
+            repoId = entity.getRepository().getId();
+            repoName = entity.getRepository().getName();
+        }
+        return new DeploymentResponse(entity.getId(), repoId, repoName, entity.getReleaseVersion(), entity.getEnvironment(),
                 entity.getBuildNumber(), entity.getBuildStatus(), entity.getBuildDurationMs(), entity.getCommitRange(), entity.getJiraVersions(), entity.getDeployedAt());
     }
 

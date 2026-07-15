@@ -5,18 +5,18 @@ spring:
   application:
     name: sentinelai-knowledge-service
   datasource:
-    url: ${SKS_DATASOURCE_URL:jdbc:postgresql://localhost:5112/sentinelai_knowledge}
+    url: ${SKS_DATASOURCE_URL:jdbc:postgresql://localhost:5111/sentinelai_knowledge}
     username: ${SKS_DATASOURCE_USERNAME:sentinel}
     password: ${SKS_DATASOURCE_PASSWORD:sentinel_pass}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    enabled: true
+    enabled: false
   kafka:
     bootstrap-servers: ${SKS_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
