@@ -13,3 +13,4 @@ SentinelAI-Knowledge-Service/.project
 /SentinelAI-Knowledge-Service/target
 /SentinelAI-Knowledge-Service/target
 *.class
+/SentinelAI-Knowledge-Service/target/classes
