@@ -1,0 +1,69 @@
+start Docker Desktop
+
+run-server.bat : for ELK, postgres, pgadmin  (run this 10min befere ELK takes time)
+
+start-all : UI and Python
+
+ru two services from Eclipse
+
+elk-seed-data
+
+openrouter : create token
+
+sampple logs
+
+2026-07-20 10:14:32.105 [main] INFO  com.example.service.UserService - Connecting to database at jdbc:mysql://localhost:3306/db
+2026-07-20 10:14:32.412 [main] INFO  com.example.service.UserService - Connection established successfully.
+2026-07-20 10:15:01.883 [http-nio-8080-exec-1] WARN  com.example.controller.AuthController - Failed login attempt for user: admin_test
+2026-07-20 10:16:11.002 [http-nio-8080-exec-3] ERROR com.example.service.PaymentService - Payment processing failed for Order ID: ORD-88492
+
+
+------------
+2026-07-20 09:15:21 INFO Deployment completed version=2.5.0
+
+2026-07-20 09:16:11 INFO Application started successfully
+
+2026-07-20 09:17:43 INFO Payment request received orderId=100234
+
+2026-07-20 09:18:22 WARN Database connection pool usage=94%
+
+2026-07-20 09:18:24 WARN HikariPool waiting for connection
+
+2026-07-20 09:18:25 ERROR SQLTransientConnectionException Connection timeout
+
+2026-07-20 09:18:26 ERROR PaymentService Payment failed
+
+2026-07-20 09:18:26 ERROR HTTP 500 returned
+
+2026-07-20 09:18:27 WARN CircuitBreaker OPEN
+
+2026-07-20 09:18:28 ERROR Checkout failed
+
+---
+2026-07-20 09:15:24.812 INFO 28456 --- [nio-8080-exec-3] c.s.payment.PaymentController :
+Received payment request orderId=ORD-452178 customerId=C98211
+
+2026-07-20 09:15:24.824 DEBUG 28456 --- [nio-8080-exec-3] org.hibernate.SQL :
+select account0_.id as id1_0_, account0_.balance as balance2_0_
+from account account0_
+where account0_.id=?
+
+2026-07-20 09:15:28.442 WARN 28456 --- [housekeeper] com.zaxxer.hikari.pool.HikariPool :
+HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=12s)
+
+2026-07-20 09:15:29.014 WARN 28456 --- [nio-8080-exec-7] com.zaxxer.hikari.pool.HikariPool :
+Connection is not available, request timed out after 30000ms
+
+2026-07-20 09:15:29.028 ERROR 28456 --- [nio-8080-exec-7] c.s.payment.service.PaymentService :
+Unable to complete payment transaction
+
+org.springframework.transaction.CannotCreateTransactionException:
+Could not open JPA EntityManager for transaction
+
+Caused by:
+org.hibernate.exception.JDBCConnectionException:
+Unable to acquire JDBC Connection
+
+Caused by:
+java.sql.SQLTransientConnectionException:
+HikariPool-1 - Connection is not available
