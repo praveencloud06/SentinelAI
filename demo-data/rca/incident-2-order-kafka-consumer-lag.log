@@ -1,0 +1,71 @@
+2026-07-18 09:00:12.234 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Starting OrderApplication v3.2.1 on order-pod-5d6e7f-mn4p with PID 1
+2026-07-18 09:00:12.345 INFO  [order-service] [main] com.sentinel.order.OrderApplication - The following profiles are active: production
+2026-07-18 09:00:13.567 INFO  [order-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-07-18 09:00:14.123 INFO  [order-service] [main] o.a.kafka.clients.consumer.ConsumerConfig - ConsumerConfig values:
+	group.id = order-service-consumer-group
+	bootstrap.servers = [kafka-1.internal:9092, kafka-2.internal:9092, kafka-3.internal:9092]
+	enable.auto.commit = false
+	max.poll.records = 500
+	max.poll.interval.ms = 300000
+2026-07-18 09:00:14.789 INFO  [order-service] [main] o.a.k.clients.consumer.KafkaConsumer - Subscribed to topic(s): order-events
+2026-07-18 09:00:15.456 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Discovered group coordinator kafka-1.internal:9092 (id: 1 rack: null)
+2026-07-18 09:00:15.678 INFO  [order-service] [main] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Revoking previously assigned partitions []
+2026-07-18 09:00:15.789 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] (Re-)joining group
+2026-07-18 09:00:16.234 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Successfully joined group with generation 125
+2026-07-18 09:00:16.456 INFO  [order-service] [main] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Setting newly assigned partitions: order-events-0, order-events-1, order-events-2
+2026-07-18 09:00:16.678 INFO  [order-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-07-18 09:00:16.789 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Started OrderApplication in 4.567 seconds (JVM running for 5.123)
+2026-07-18 09:00:17.123 INFO  [order-service] [kafka-consumer-1] c.s.order.consumer.OrderEventConsumer - Starting Kafka message consumption from partitions: [0, 1, 2]
+2026-07-18 09:05:23.456 INFO  [order-service] [kafka-consumer-1] c.s.order.consumer.OrderEventConsumer - Processed 245 messages. Current lag: partition-0: 125, partition-1: 98, partition-2: 142
+2026-07-18 09:10:45.789 INFO  [order-service] [kafka-consumer-1] c.s.order.consumer.OrderEventConsumer - Processed 523 messages. Current lag: partition-0: 87, partition-1: 56, partition-2: 93
+2026-07-18 09:14:58.123 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Received SIGTERM signal, initiating graceful shutdown
+2026-07-18 09:14:58.234 INFO  [order-service] [kafka-consumer-1] c.s.order.consumer.OrderEventConsumer - Stopping Kafka consumer...
+2026-07-18 09:14:58.345 WARN  [order-service] [kafka-consumer-1] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Offset commit failed on partition order-events-1 at offset 125678: The request timed out.
+2026-07-18 09:14:58.456 INFO  [order-service] [kafka-consumer-1] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-1, groupId=order-service-consumer-group] Member order-consumer-1 sending LeaveGroup request to coordinator kafka-1.internal:9092 (id: 1 rack: null)
+2026-07-18 09:14:58.567 INFO  [order-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat stopped gracefully
+2026-07-18 09:14:58.678 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Order service stopped
+2026-07-18 09:15:12.234 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Starting OrderApplication v3.2.1 on order-pod-6e7f8g-op5q with PID 1
+2026-07-18 09:15:12.345 INFO  [order-service] [main] com.sentinel.order.OrderApplication - The following profiles are active: production
+2026-07-18 09:15:13.567 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Discovered group coordinator kafka-1.internal:9092 (id: 1 rack: null)
+2026-07-18 09:15:13.678 INFO  [order-service] [main] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Revoking previously assigned partitions []
+2026-07-18 09:15:13.789 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] (Re-)joining group
+2026-07-18 09:15:14.123 WARN  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Rebalance failed due to group coordinator being unavailable
+2026-07-18 09:15:14.456 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Discovered group coordinator kafka-2.internal:9092 (id: 2 rack: null)
+2026-07-18 09:15:14.789 INFO  [order-service] [main] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Successfully joined group with generation 126
+2026-07-18 09:15:15.123 INFO  [order-service] [main] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Setting newly assigned partitions: order-events-0, order-events-1, order-events-2
+2026-07-18 09:15:15.456 WARN  [order-service] [main] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Offset commit failed on partition order-events-1 at offset 125678: This is not the correct coordinator.
+2026-07-18 09:15:15.789 INFO  [order-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-07-18 09:15:15.901 INFO  [order-service] [main] com.sentinel.order.OrderApplication - Started OrderApplication in 3.678 seconds (JVM running for 4.234)
+2026-07-18 09:15:16.234 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Starting Kafka message consumption from partitions: [0, 1, 2]
+2026-07-18 09:15:16.567 WARN  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer lag detected after rebalancing. Lag: partition-0: 5234, partition-1: 12456, partition-2: 8765
+2026-07-18 09:20:45.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 2345 messages. Current lag: partition-0: 8123, partition-1: 18765, partition-2: 11234
+2026-07-18 09:25:12.456 WARN  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - High consumer lag detected. Total lag: 45234 messages. This may be related to deployment rebalancing in commit 789ghi012jkl
+2026-07-18 09:30:45.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 5678 messages. Current lag: partition-0: 12456, partition-1: 21234, partition-2: 14987
+2026-07-18 09:35:12.123 ERROR [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer lag exceeds threshold. Total lag: 50000+ messages. Order processing delayed by 15 minutes.
+2026-07-18 09:40:45.456 WARN  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer group rebalancing caused lag spike. Review ORD-334 for similar issues.
+2026-07-18 09:45:12.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 8765 messages. Current lag: partition-0: 10234, partition-1: 17890, partition-2: 12456
+2026-07-18 09:50:45.123 WARN  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Order processing delayed. Investigating Kafka consumer configuration after v3.2.1 deployment.
+2026-07-18 09:55:12.456 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 11234 messages. Current lag: partition-0: 8765, partition-1: 14567, partition-2: 9876
+2026-07-18 10:00:45.789 ERROR [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer lag critical. Total lag: 48K messages. Manual intervention required.
+2026-07-18 10:05:12.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 13456 messages. Current lag: partition-0: 7234, partition-1: 12345, partition-2: 8567
+2026-07-18 10:10:45.456 WARN  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer lag persists after rebalancing. Possible cause: insufficient consumer threads or slow message processing.
+2026-07-18 10:15:12.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 15678 messages. Current lag: partition-0: 6123, partition-1: 10234, partition-2: 7456
+2026-07-18 10:20:45.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 17890 messages. Current lag: partition-0: 5012, partition-1: 8765, partition-2: 6234
+2026-07-18 10:25:12.456 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 19234 messages. Current lag: partition-0: 4123, partition-1: 7456, partition-2: 5123
+2026-07-18 10:30:15.789 INFO  [order-service] [kafka-admin] c.s.order.admin.KafkaAdminService - Manual consumer offset reset initiated by operations team
+2026-07-18 10:30:16.123 INFO  [order-service] [kafka-admin] o.a.k.c.admin.AdminClient - Resetting consumer group offsets: order-service-consumer-group
+2026-07-18 10:30:16.456 INFO  [order-service] [kafka-consumer-2] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Revoking previously assigned partitions [order-events-0, order-events-1, order-events-2]
+2026-07-18 10:30:16.789 INFO  [order-service] [kafka-consumer-2] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] (Re-)joining group
+2026-07-18 10:30:17.123 INFO  [order-service] [kafka-consumer-2] o.a.k.c.c.internals.AbstractCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Successfully joined group with generation 127
+2026-07-18 10:30:17.456 INFO  [order-service] [kafka-consumer-2] o.a.k.c.c.internals.ConsumerCoordinator - [Consumer clientId=order-consumer-2, groupId=order-service-consumer-group] Setting newly assigned partitions: order-events-0, order-events-1, order-events-2
+2026-07-18 10:30:17.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer offsets reset. Resuming consumption from latest offsets.
+2026-07-18 10:35:45.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 1234 messages after reset. Current lag: partition-0: 234, partition-1: 345, partition-2: 287
+2026-07-18 10:40:12.456 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 2456 messages after reset. Current lag: partition-0: 156, partition-1: 198, partition-2: 175
+2026-07-18 10:45:45.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 3678 messages after reset. Current lag: partition-0: 89, partition-1: 112, partition-2: 95
+2026-07-18 10:50:12.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 4890 messages after reset. Current lag: partition-0: 45, partition-1: 67, partition-2: 52
+2026-07-18 10:55:45.456 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 5123 messages after reset. Current lag: partition-0: 23, partition-1: 34, partition-2: 28
+2026-07-18 11:00:12.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 5456 messages after reset. Current lag: partition-0: 12, partition-1: 18, partition-2: 15
+2026-07-18 11:05:45.123 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 5678 messages after reset. Current lag: partition-0: 5, partition-1: 7, partition-2: 6
+2026-07-18 11:10:12.456 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Processed 5789 messages after reset. Current lag: partition-0: 2, partition-1: 3, partition-2: 2
+2026-07-18 11:15:45.789 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Consumer lag cleared. Order processing returned to normal. Total recovery time: 2 hours.
+2026-07-18 11:15:45.901 INFO  [order-service] [kafka-consumer-2] c.s.order.consumer.OrderEventConsumer - Kafka consumer health check: HEALTHY. Lag under control.

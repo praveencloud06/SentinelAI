@@ -1,4 +1,4 @@
- {
+{
   "huggingface": {
     "token": "<set HUGGINGFACE_TOKEN env var>",
     "model": "facebook/bart-large-cnn"
@@ -14,7 +14,18 @@
     "model": "anthropic.claude-v2"
   },
   "openrouter": {
-    "api_key": "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",
+    "api_key": "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",
     "model": "openai/gpt-oss-20b:free"
+  },
+  "openai": {
+    "api_key": "<set OPENAI_API_KEY env var>",
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-4o-mini",
+    "embedding_model": "text-embedding-3-small"
+  },
+  "embedding": {
+    "enabled": true,
+    "provider": "openai",
+    "fallback_provider": "ollama"
   }
 }

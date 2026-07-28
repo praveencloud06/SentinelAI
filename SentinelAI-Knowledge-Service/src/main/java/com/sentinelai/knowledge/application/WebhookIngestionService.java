@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sentinelai.knowledge.api.dto.SyncResponse;
 import com.sentinelai.knowledge.config.ExternalPlatformProperties;
 import com.sentinelai.knowledge.domain.EngineeringEventType;
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import com.sentinelai.knowledge.domain.RelationshipType;
 import com.sentinelai.knowledge.domain.SourceSystem;
 import com.sentinelai.knowledge.domain.SyncStatus;
@@ -95,6 +96,8 @@ public class WebhookIngestionService {
 
     private List<EngineeringEventEntity> ingestGitPush(SourceSystem sourceSystem, RepositoryEntity repository, JsonNode root) {
         List<EngineeringEventEntity> events = new ArrayList<>();
+        // Extract branch from the push ref (e.g. "refs/heads/main" → "main")
+        String branch = resolveBranchFromRef(firstText(root, "ref"), repository.getDefaultBranch());
         JsonNode commits = root.path("commits");
         if (commits.isArray()) {
             for (JsonNode commitNode : commits) {
@@ -105,6 +108,7 @@ public class WebhookIngestionService {
                 CommitMetadataEntity commit = commitRepository.findById(hash).orElseGet(CommitMetadataEntity::new);
                 commit.setHash(hash);
                 commit.setRepository(repository);
+                commit.setBranch(branch);
                 commit.setMessage(text(commitNode, "message", ""));
                 commit.setAuthorName(text(commitNode.path("author"), "name", null));
                 commit.setAuthorEmail(text(commitNode.path("author"), "email", null));
@@ -170,6 +174,7 @@ public class WebhookIngestionService {
         issue.setTenantId(resolvedTenantId(tenantId));
         issue.setProjectKey(text(fields.path("project"), "key", projectFromIssueKey(key)));
         issue.setSummary(text(fields, "summary", text(root, "summary", "")));
+        issue.setDescription(text(fields, "description", text(root, "description", null)));
         issue.setIssueType(text(fields.path("issuetype"), "name", text(root, "issueType", null)));
         issue.setStatus(text(fields.path("status"), "name", text(root, "status", null)));
         issue.setAssignee(text(fields.path("assignee"), "displayName", text(root, "assignee", null)));
@@ -194,11 +199,12 @@ public class WebhookIngestionService {
         document.setPageId(pageId);
         document.setTenantId(resolvedTenantId(tenantId));
         document.setTitle(text(page, "title", text(page, "name", "Untitled Confluence document")));
+        document.setBody(resolveConfluenceBody(page));
         document.setDocumentType(detectDocumentType(document.getTitle(), firstText(page, "type")));
         document.setVersion(intValue(firstText(page.path("version"), "number"), 1));
         document.setAuthor(firstText(page.path("lastUpdated").path("by"), "displayName", "publicName"));
         document.setLastModifiedAt(parseInstant(firstText(page.path("version"), "when", "createdAt"), Instant.now()));
-        document.setEmbeddingStatus("PENDING");
+        document.setEmbeddingStatus(EmbeddingStatus.PENDING);
         confluenceDocumentRepository.save(document);
         return List.of(event(SourceSystem.CONFLUENCE, EngineeringEventType.ADR_UPDATED, "ConfluenceDocument", document.getPageId(),
                 "Confluence document updated: " + document.getTitle(), document.getLastModifiedAt(), document.getTenantId()));
@@ -245,6 +251,48 @@ public class WebhookIngestionService {
         repository.setUrl(firstText(repositoryNode, "html_url", "web_url", "url"));
         repository.setLastSyncedAt(Instant.now());
         return repositoryRepository.save(repository);
+    }
+
+    /**
+     * Resolves the branch name from a Git ref string.
+     * Handles full refs (e.g. "refs/heads/main" → "main") and bare names (e.g. "main" → "main").
+     * Falls back to the repository's configured default branch, then "main".
+     */
+    private String resolveBranchFromRef(String ref, String repositoryDefaultBranch) {
+        if (ref != null && !ref.isBlank()) {
+            String branch = ref.startsWith("refs/heads/") ? ref.substring("refs/heads/".length()) : ref;
+            if (!branch.isBlank()) {
+                return branch;
+            }
+        }
+        return repositoryDefaultBranch != null && !repositoryDefaultBranch.isBlank() ? repositoryDefaultBranch : "main";
+    }
+
+    /**
+     * Extracts the Confluence page body text from a webhook payload.
+     * Tries body.storage.value (Confluence Cloud REST), body.view.value, and body as plain text, in that order.
+     * Returns null when no body content is present so that existing documents are not overwritten with empty strings.
+     */
+    private String resolveConfluenceBody(JsonNode page) {
+        JsonNode bodyNode = page.path("body");
+        if (!bodyNode.isMissingNode()) {
+            // Confluence Cloud REST v2 format: body.storage.value
+            String storageValue = bodyNode.path("storage").path("value").asText(null);
+            if (storageValue != null && !storageValue.isBlank()) {
+                return storageValue;
+            }
+            // Rendered view format: body.view.value
+            String viewValue = bodyNode.path("view").path("value").asText(null);
+            if (viewValue != null && !viewValue.isBlank()) {
+                return viewValue;
+            }
+            // Plain text body field
+            String plainBody = bodyNode.asText(null);
+            if (plainBody != null && !plainBody.isBlank() && !"{}".equals(plainBody)) {
+                return plainBody;
+            }
+        }
+        return null;
     }
 
     private void validateWebhookToken(SourceSystem sourceSystem, Map<String, String> headers, ExternalPlatformProperties.BasePlatform platform) {

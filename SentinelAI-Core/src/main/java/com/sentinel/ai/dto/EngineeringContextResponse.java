@@ -18,6 +18,18 @@ public class EngineeringContextResponse {
     private boolean available;
     private String message;
 
+    // ── Semantic context metadata (populated by POST /api/context/retrieve) ──
+    /** Human-readable summary of retrieved engineering context. */
+    private String summary;
+
+    /** Confidence score (0–100) from the Knowledge Service. */
+    private int confidence;
+
+    /** Number of knowledge artifacts that contributed to the context. */
+    private int evidenceCount;
+
+    // ── Legacy polling data (populated by individual REST GETs) ─────────────
+
     @Builder.Default
     private List<Map<String, Object>> timeline = new ArrayList<>();
 

@@ -32,6 +32,7 @@ public class JiraConnector implements EngineeringConnector {
         issue.setTenantId(tenantId);
         issue.setProjectKey("PAY");
         issue.setSummary("Improve payment retry observability");
+        issue.setDescription("Gateway retries exceeded timeout because the retry policy did not stop after database latency increased. This story implements improved observability metrics to track retry behavior and circuit breaker state transitions.");
         issue.setIssueType("Story");
         issue.setStatus("Closed");
         issue.setAssignee("SentinelAI Engineering");

@@ -51,7 +51,7 @@ public class ElkResponseParser {
             Map<String, Object> parsed = OBJECT_MAPPER.readValue(
                     cleaned, new TypeReference<Map<String, Object>>() {});
 
-            // Accept both ELK field names and the AI Engine's standard RCA field names
+            // ── Core fields (original) ───────────────────────────────────────
             String summary = coalesce(
                     stringOrNull(parsed, "summary"),
                     stringOrNull(parsed, "issue"));
@@ -67,6 +67,17 @@ public class ElkResponseParser {
                     "Review the suspicious logs for further clues.");
             List<String> suspiciousLogs = listOrEmpty(parsed, "suspiciousLogs");
 
+            // ── Enterprise fields (new) ──────────────────────────────────────
+            Integer confidence = intOrNull(parsed, "confidence");
+            String relatedDeployment = stringOrNull(parsed, "relatedDeployment");
+            String relatedJira = stringOrNull(parsed, "relatedJira");
+            String relatedCommit = stringOrNull(parsed, "relatedCommit");
+            String relevantRunbook = stringOrNull(parsed, "relevantRunbook");
+            List<Object> timeline = listOrEmptyObj(parsed, "timeline");
+            List<String> nextSteps = listOrEmpty(parsed, "nextSteps");
+            Boolean escalate = boolOrNull(parsed, "escalate");
+            String escalationReason = stringOrNull(parsed, "escalationReason");
+
             // Fallback to raw text if JSON contained no recognisable fields
             if (summary == null && probableRootCause == null) {
                 logger.debug("JSON parsed but no expected keys found – treating as plain text summary");
@@ -79,6 +90,16 @@ public class ElkResponseParser {
                     .impactedService(impactedService)
                     .recommendedAction(recommendedAction)
                     .suspiciousLogs(suspiciousLogs)
+                    // Enterprise fields
+                    .confidence(confidence)
+                    .relatedDeployment(relatedDeployment)
+                    .relatedJira(relatedJira)
+                    .relatedCommit(relatedCommit)
+                    .relevantRunbook(relevantRunbook)
+                    .timeline(timeline)
+                    .nextSteps(nextSteps)
+                    .escalate(escalate)
+                    .escalationReason(escalationReason)
                     .build();
 
         } catch (Exception e) {
@@ -123,9 +144,28 @@ public class ElkResponseParser {
         return (val instanceof List<?> list) ? (List<String>) list : Collections.emptyList();
     }
 
+    @SuppressWarnings("unchecked")
+    private List<Object> listOrEmptyObj(Map<String, Object> map, String key) {
+        Object val = map.get(key);
+        return (val instanceof List<?> list) ? (List<Object>) list : Collections.emptyList();
+    }
+
     private String stringOrNull(Map<String, Object> map, String key) {
         Object val = map.get(key);
         return (val instanceof String s && !s.isBlank()) ? s : null;
+    }
+
+    private Integer intOrNull(Map<String, Object> map, String key) {
+        Object val = map.get(key);
+        if (val instanceof Number num) {
+            return num.intValue();
+        }
+        return null;
+    }
+
+    private Boolean boolOrNull(Map<String, Object> map, String key) {
+        Object val = map.get(key);
+        return (val instanceof Boolean b) ? b : null;
     }
 
     /** Returns the first non-null value from the provided candidates. */

@@ -60,6 +60,7 @@ public class GitConnector implements EngineeringConnector {
         CommitMetadataEntity commit = commitRepository.findById("9f3a1c7-sample").orElseGet(CommitMetadataEntity::new);
         commit.setHash("9f3a1c7-sample");
         commit.setRepository(repository);
+        commit.setBranch(repository.getDefaultBranch() != null ? repository.getDefaultBranch() : "main");
         commit.setAuthorName("SentinelAI Engineering");
         commit.setAuthorEmail("engineering@example.com");
         commit.setMessage("Add payment retry instrumentation");

@@ -28,6 +28,39 @@ management:
 
 sentinelai:
   knowledge:
+    embedding:
+      enabled: ${SKS_EMBEDDING_ENABLED:false}
+      provider: ${SKS_EMBEDDING_PROVIDER:openrouter}
+      model: ${SKS_EMBEDDING_MODEL:text-embedding-3-small}
+      dimension: ${SKS_EMBEDDING_DIMENSION:1536}
+      batch-size: ${SKS_EMBEDDING_BATCH_SIZE:10}
+      async:
+        enabled: ${SKS_EMBEDDING_ASYNC_ENABLED:true}
+        thread-pool-size: ${SKS_EMBEDDING_THREAD_POOL_SIZE:5}
+        queue-capacity: ${SKS_EMBEDDING_QUEUE_CAPACITY:100}
+      retry:
+        max-attempts: ${SKS_EMBEDDING_RETRY_MAX_ATTEMPTS:3}
+        backoff-ms: ${SKS_EMBEDDING_RETRY_BACKOFF_MS:5000}
+      chunking:
+        enabled: ${SKS_EMBEDDING_CHUNKING_ENABLED:true}
+        max-chunk-size: ${SKS_EMBEDDING_CHUNKING_MAX_SIZE:2000}
+        chunk-overlap: ${SKS_EMBEDDING_CHUNKING_OVERLAP:200}
+      openrouter:
+        api-key: ${SKS_OPENROUTER_API_KEY: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}
+        base-url: ${SKS_OPENROUTER_BASE_URL:https://openrouter.ai/api/v1}
+      openai:
+        api-key: ${SKS_OPENAI_API_KEY:}
+        base-url: ${SKS_OPENAI_BASE_URL:https://api.openai.com/v1}
+      ollama:
+        base-url: ${SKS_OLLAMA_BASE_URL:http://localhost:11434}
+      azure-openai:
+        api-key: ${SKS_AZURE_OPENAI_API_KEY:}
+        endpoint: ${SKS_AZURE_OPENAI_ENDPOINT:}
+        deployment-name: ${SKS_AZURE_OPENAI_DEPLOYMENT:}
+    ai-engine:
+      url: ${SKS_AI_ENGINE_URL:http://localhost:8000}
+      embeddings-endpoint: ${SKS_AI_ENGINE_EMBEDDINGS_ENDPOINT:/api/embeddings}
+      timeout-ms: ${SKS_AI_ENGINE_TIMEOUT_MS:30000}
     sync:
       scheduled-enabled: ${SKS_SCHEDULED_SYNC_ENABLED:false}
       fixed-delay-ms: ${SKS_SYNC_FIXED_DELAY_MS:900000}

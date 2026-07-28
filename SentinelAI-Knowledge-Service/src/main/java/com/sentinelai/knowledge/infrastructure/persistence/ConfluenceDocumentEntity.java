@@ -1,7 +1,10 @@
 package com.sentinelai.knowledge.infrastructure.persistence;
 
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -26,6 +29,9 @@ public class ConfluenceDocumentEntity {
     @Column(nullable = false, length = 512)
     private String title;
 
+    @Column(columnDefinition = "text")
+    private String body;
+
     @Column(length = 80)
     private String documentType;
 
@@ -38,6 +44,7 @@ public class ConfluenceDocumentEntity {
     @Column(name = "last_modified_at")
     private Instant lastModifiedAt;
 
-    @Column(name = "embedding_status", length = 80)
-    private String embeddingStatus = "PENDING";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "embedding_status", length = 40)
+    private EmbeddingStatus embeddingStatus;
 }

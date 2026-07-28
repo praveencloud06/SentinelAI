@@ -1,9 +1,12 @@
 package com.sentinelai.knowledge.infrastructure.persistence;
 
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -31,6 +34,9 @@ public class CommitMetadataEntity {
     @JoinColumn(name = "repository_id", nullable = false)
     private RepositoryEntity repository;
 
+    @Column(name = "branch", length = 256)
+    private String branch;
+
     @Column(name = "author_name", length = 200)
     private String authorName;
 
@@ -47,4 +53,8 @@ public class CommitMetadataEntity {
     @CollectionTable(name = "commit_changed_files", joinColumns = @JoinColumn(name = "commit_hash"))
     @Column(name = "file_path", nullable = false, length = 1024)
     private List<String> changedFiles = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "embedding_status", length = 40)
+    private EmbeddingStatus embeddingStatus;
 }

@@ -39,8 +39,8 @@ logging:
 sentinelai:
   limits:
     # Protects providers (e.g., Groq) from oversized requests.
-    max-log-chars: 2000
-    max-prompt-chars: 3000
+    max-log-chars: 20000
+    max-prompt-chars: 30000
   ai-engine:
     # FastAPI engine endpoint (see SentinelAI-AI-Engine)
     url: http://localhost:8000/analyze
@@ -53,17 +53,20 @@ sentinelai:
     enabled: true
   knowledge-service:
     # Disabled by default so RCA continues to work without the SKS microservice.
+    # Alias: sentinelai.knowledge.enabled (spec reference)
     enabled: ${SENTINELAI_KNOWLEDGE_SERVICE_ENABLED:true}
+    # Alias: sentinelai.knowledge.base-url (spec reference)
     url: ${SENTINELAI_KNOWLEDGE_SERVICE_URL:http://localhost:8090}
     max-timeline-events: ${SENTINELAI_KNOWLEDGE_SERVICE_MAX_TIMELINE_EVENTS:20}
-    request-timeout-ms: ${SENTINELAI_KNOWLEDGE_SERVICE_TIMEOUT_MS:3000}
+    # Alias: sentinelai.knowledge.timeout (spec reference)
+    request-timeout-ms: ${SENTINELAI_KNOWLEDGE_SERVICE_TIMEOUT_MS:5000}
   # ── ELK Investigation ────────────────────────────────────────────────────────
   # Enabled by default for local development.
   # Override enabled: false in environment-specific config for non-dev deployments.
   elk:
     enabled: true
     url: http://localhost:9200
-    index: logs-application
+    index: sentinelai-logs
     # Maximum number of log documents fetched per investigation request.
     # Keeps AI prompts within token limits.
     max-log-results: 1000

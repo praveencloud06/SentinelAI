@@ -1,7 +1,10 @@
 package com.sentinelai.knowledge.infrastructure.persistence;
 
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -55,4 +58,8 @@ public class DeploymentEntity {
 
     @Column(name = "deployed_at", nullable = false)
     private Instant deployedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "embedding_status", length = 40)
+    private EmbeddingStatus embeddingStatus;
 }

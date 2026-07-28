@@ -1,0 +1,78 @@
+﻿{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:47:56.993Z","service":"payment-service","severity":"ERROR","message":"HikariCP connection pool exhausted - Connection is not available, request timed out after 30017ms","traceId":"pay-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:06.993Z","service":"payment-service","severity":"ERROR","message":"SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30002ms","traceId":"pay-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:16.993Z","service":"payment-service","severity":"WARN","message":"HikariCP connection pool active connections: 20/20, idle: 0/20, pending threads: 45","traceId":"pay-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:26.993Z","service":"payment-service","severity":"ERROR","message":"Payment processing failed for transaction tx-98765: Database connection timeout","traceId":"pay-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:31.993Z","service":"payment-service","severity":"ERROR","message":"Failed to execute database query after 30s timeout - commit hash: abc123def456","traceId":"pay-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:36.993Z","service":"payment-service","severity":"WARN","message":"Database timeout configuration changed in deployment v2.1.5 build 1245","traceId":"pay-006","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:48:46.993Z","service":"payment-service","severity":"ERROR","message":"Related to Jira issue PAY-421: Payment processing timeout errors","traceId":"pay-007","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:52:56.993Z","service":"payment-service","severity":"INFO","message":"Rollback initiated - reverting to v2.1.4-hotfix","traceId":"pay-008","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:55:56.993Z","service":"payment-service","severity":"INFO","message":"Service recovered after rollback - connection pool stable at 20/20","traceId":"pay-009","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:57:56.993Z","service":"payment-service","severity":"INFO","message":"Deployment v2.1.4-hotfix completed successfully - commit def456ghi789","traceId":"pay-010","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:17:56.993Z","service":"order-service","severity":"WARN","message":"Kafka consumer lag detected: 15234 messages behind on partition order-events-0","traceId":"ord-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:18:26.993Z","service":"order-service","severity":"ERROR","message":"Kafka consumer group rebalancing triggered - commit 789ghi012jkl","traceId":"ord-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:18:56.993Z","service":"order-service","severity":"WARN","message":"Consumer lag increased to 50123 messages across 3 partitions","traceId":"ord-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:19:56.993Z","service":"order-service","severity":"ERROR","message":"Order processing delayed by 15 minutes - related to Jira ORD-334","traceId":"ord-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:22:56.993Z","service":"order-service","severity":"WARN","message":"Kafka consumer configuration updated in v3.2.1 deployment","traceId":"ord-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:27:56.993Z","service":"order-service","severity":"INFO","message":"Consumer lag recovering - now 25000 messages behind","traceId":"ord-006","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T05:32:56.993Z","service":"order-service","severity":"INFO","message":"Kafka consumer lag normalized - less than 500 messages","traceId":"ord-007","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T03:17:56.993Z","service":"vehicle-registration-service","severity":"ERROR","message":"Oracle database query timeout after 30s - VEH-567","traceId":"veh-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T03:18:26.993Z","service":"vehicle-registration-service","severity":"ERROR","message":"ORA-01013: user requested cancel of current operation","traceId":"veh-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T03:18:56.993Z","service":"vehicle-registration-service","severity":"WARN","message":"Vehicle registration queries taking 25+ seconds","traceId":"veh-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T03:20:56.993Z","service":"vehicle-registration-service","severity":"ERROR","message":"Database connection pool exhausted - Oracle timeout","traceId":"veh-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T03:22:56.993Z","service":"vehicle-registration-service","severity":"INFO","message":"Query optimization applied - response time improved to 2s","traceId":"veh-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T23:17:56.993Z","service":"notification-service","severity":"ERROR","message":"Redis connection failed: Connection refused (localhost:6379)","traceId":"not-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T23:18:06.993Z","service":"notification-service","severity":"ERROR","message":"Unable to retrieve notification templates from cache - NOT-223","traceId":"not-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T23:18:26.993Z","service":"notification-service","severity":"WARN","message":"Falling back to database for notification templates","traceId":"not-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T23:19:56.993Z","service":"notification-service","severity":"ERROR","message":"Notification processing degraded - Redis outage detected","traceId":"not-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T23:27:56.993Z","service":"notification-service","severity":"INFO","message":"Redis connection restored - cache warming in progress","traceId":"not-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:17:56.993Z","service":"auth-service","severity":"ERROR","message":"JWT signature validation failed - invalid token","traceId":"auth-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:18:01.993Z","service":"auth-service","severity":"ERROR","message":"Authentication failed for user - token expired","traceId":"auth-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:18:11.993Z","service":"auth-service","severity":"WARN","message":"High volume of JWT validation failures detected - AUTH-890","traceId":"auth-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:18:56.993Z","service":"auth-service","severity":"ERROR","message":"JWT secret key mismatch - deployment issue in build 4231","traceId":"auth-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:20:56.993Z","service":"auth-service","severity":"INFO","message":"JWT secret key rotated - authentication restored","traceId":"auth-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-27T19:22:56.993Z","service":"auth-service","severity":"INFO","message":"Authentication service stabilized - commit yza567bcd890","traceId":"auth-006","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:32:56.993Z","service":"payment-service","severity":"INFO","message":"Application started successfully","traceId":"sys-001","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:37:56.993Z","service":"order-service","severity":"INFO","message":"Kafka consumer group initialized","traceId":"sys-002","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:42:56.993Z","service":"vehicle-registration-service","severity":"INFO","message":"Database connection pool initialized","traceId":"sys-003","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T06:57:56.993Z","service":"notification-service","severity":"INFO","message":"Redis connection pool ready","traceId":"sys-004","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T07:02:56.993Z","service":"auth-service","severity":"INFO","message":"JWT validation service ready","traceId":"sys-005","environment":"production"}
+{"index":{"_index":"sentinelai-logs"}}
+{"timestamp":"2026-07-28T07:07:56.993Z","service":"payment-service","severity":"INFO","message":"Health check passed - all systems operational","traceId":"sys-006","environment":"production"}

@@ -1,5 +1,6 @@
 package com.sentinel.ai.service;
 
+import com.sentinel.ai.dto.ContextRetrieveResult;
 import com.sentinel.ai.dto.EngineeringContextResponse;
 import com.sentinel.ai.dto.RCAResponse;
 import com.sentinel.ai.model.KnowledgeBaseEntry;
@@ -90,6 +91,32 @@ public class RCAService {
 
         EngineeringContextResponse engineeringContext = knowledgeServiceClient.fetchContext(safeLog);
         String engineeringPromptContext = knowledgeServiceClient.toPromptContext(engineeringContext);
+
+        // NEW: enrich with semantic context from POST /api/context/retrieve.
+        // Runs after the legacy polling fetch; the result replaces/augments the prompt context
+        // when the Knowledge Service is reachable. Falls back silently if unavailable.
+        ContextRetrieveResult semanticContext = knowledgeServiceClient.retrieveContext(safeLog);
+        if (semanticContext.isRetrieved() && !semanticContext.getContextText().isBlank()) {
+            // Prefer the semantically retrieved context for the prompt; append legacy context
+            // underneath if it also produced anything useful.
+            engineeringPromptContext = semanticContext.getContextText()
+                    + (engineeringPromptContext.isBlank() ? "" : "\n" + engineeringPromptContext);
+
+            // Surface the semantic metadata in the response so the UI can show
+            // summary, confidence, and evidence count.
+            engineeringContext = EngineeringContextResponse.builder()
+                    .enabled(engineeringContext.isEnabled())
+                    .available(true)
+                    .message(engineeringContext.getMessage())
+                    .summary(semanticContext.getSummary())
+                    .confidence(semanticContext.getConfidence())
+                    .evidenceCount(semanticContext.getEvidenceCount())
+                    .timeline(engineeringContext.getTimeline())
+                    .deployments(engineeringContext.getDeployments())
+                    .releases(engineeringContext.getReleases())
+                    .jiraIssues(engineeringContext.getJiraIssues())
+                    .build();
+        }
 
         // 2) GENERATE: create an instruction prompt for the LLM.
         // We include: (a) the log to analyze, (b) similar incidents + resolutions.

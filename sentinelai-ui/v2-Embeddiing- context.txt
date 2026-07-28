@@ -1,0 +1,517 @@
+You are a Senior React Architect, UX Designer and Enterprise Frontend Engineer.
+
+You are working on the SentinelAI UI.
+
+IMPORTANT
+
+Do NOT redesign the existing application.
+
+Do NOT break any current functionality.
+
+The existing Log RCA and ELK Investigation screens must continue to work exactly as they do today.
+
+The objective is to ADD new capabilities while preserving the current UI.
+
+======================================================
+CURRENT APPLICATION
+======================================================
+
+Current application has:
+
+• Log RCA screen
+
+• ELK Investigation screen
+
+Both are fully working.
+
+Do NOT modify their behavior.
+
+======================================================
+NEW OBJECTIVE
+======================================================
+
+Extend the UI into Version 2.
+
+Introduce a new module called
+
+Engineering Context Explorer
+
+This screen will consume the new Knowledge Service API
+
+POST /api/context/retrieve
+
+The purpose is NOT to perform RCA.
+
+The purpose is to allow engineers to discover engineering knowledge related to logs or natural language questions.
+
+======================================================
+NEW MENU
+======================================================
+
+Current Navigation
+
+• Log RCA
+
+• ELK Investigation
+
+New Navigation
+
+• Log RCA
+
+• ELK Investigation
+
+• Engineering Context Explorer
+
+Maintain existing layout.
+
+======================================================
+NEW SCREEN
+======================================================
+
+Page Title
+
+Engineering Context Explorer
+
+Subtitle
+
+Find the most relevant engineering knowledge related to logs, deployments, commits, Jira issues, runbooks and previous incidents.
+
+======================================================
+SEARCH OPTIONS
+======================================================
+
+Allow two modes.
+
+Mode 1
+
+Paste Logs
+
+Large textarea
+
+Upload log file
+
+Mode 2
+
+Natural Language
+
+Examples
+
+Find similar incidents
+
+Show deployment related to payment-service
+
+Find Hikari timeout documentation
+
+Show Jira related to database connection pool
+
+======================================================
+REQUEST
+======================================================
+
+Call
+
+POST /api/context/retrieve
+
+Request example
+
+{
+  "logs":"....",
+  "query":"optional",
+  "service":"payment-service",
+  "environment":"Production"
+}
+
+======================================================
+RESULT PAGE
+======================================================
+
+Do NOT display raw JSON.
+
+Create a modern enterprise dashboard.
+
+======================================================
+SECTION 1
+======================================================
+
+Context Summary
+
+Example
+
+Found 8 highly relevant engineering artifacts.
+
+Confidence
+
+94%
+
+Top Recommendation
+
+Deployment 2.5.0 introduced a connection pool configuration change.
+
+======================================================
+SECTION 2
+======================================================
+
+Engineering Evidence
+
+Display cards.
+
+Each card contains
+
+Icon
+
+Source
+
+Title
+
+Summary
+
+Relevance Score
+
+Reason Selected
+
+Source Link
+
+Example
+
+Deployment
+
+Version 2.5.0
+
+98%
+
+Occurred 10 minutes before incident.
+
+----------------------------------------------------
+
+GitHub
+
+Commit abc123
+
+97%
+
+Modified Hikari configuration.
+
+----------------------------------------------------
+
+Jira
+
+PAY-421
+
+95%
+
+Discusses connection pool timeout.
+
+----------------------------------------------------
+
+Confluence
+
+Database Troubleshooting Guide
+
+93%
+
+Semantically similar to uploaded logs.
+
+======================================================
+SECTION 3
+======================================================
+
+Timeline
+
+Display engineering events chronologically.
+
+Example
+
+Deployment
+
+↓
+
+Commit
+
+↓
+
+Jira
+
+↓
+
+Confluence Update
+
+↓
+
+Incident
+
+======================================================
+SECTION 4
+======================================================
+
+Relationship Graph
+
+Interactive graph.
+
+Deployment
+
+↓
+
+Commit
+
+↓
+
+Jira
+
+↓
+
+Confluence
+
+↓
+
+Runbook
+
+Allow zoom and pan.
+
+======================================================
+SECTION 5
+======================================================
+
+Related Documents
+
+Accordion view.
+
+Confluence
+
+GitHub
+
+Jira
+
+Release Notes
+
+Runbooks
+
+Click expands details.
+
+======================================================
+SECTION 6
+======================================================
+
+Filters
+
+Environment
+
+Repository
+
+Date Range
+
+Source System
+
+Minimum Relevance Score
+
+======================================================
+SECTION 7
+======================================================
+
+Search History
+
+Previous searches.
+
+Allow reopening.
+
+======================================================
+VISUAL DESIGN
+======================================================
+
+Keep existing SentinelAI theme.
+
+Dark mode.
+
+Enterprise dashboard.
+
+Use cards.
+
+Use badges.
+
+Use chips.
+
+Use progress bars for confidence.
+
+Use icons.
+
+GitHub icon
+
+Jira icon
+
+Confluence icon
+
+Jenkins icon
+
+Deployment icon
+
+Commit icon
+
+Runbook icon
+
+Timeline icon
+
+Relationship icon
+
+======================================================
+LOADING EXPERIENCE
+======================================================
+
+Instead of spinner
+
+Show steps.
+
+Searching Metadata
+
+Searching Relationships
+
+Searching Similar Knowledge
+
+Ranking Results
+
+Preparing Engineering Context
+
+======================================================
+ERROR HANDLING
+======================================================
+
+Friendly messages.
+
+No context found.
+
+Knowledge Service unavailable.
+
+Timeout.
+
+======================================================
+REUSABLE COMPONENTS
+======================================================
+
+Create reusable components.
+
+EngineeringEvidenceCard
+
+TimelineView
+
+RelationshipGraph
+
+ContextSummaryCard
+
+EvidenceFilter
+
+EvidenceTable
+
+SearchPanel
+
+LoadingSteps
+
+======================================================
+ARCHITECTURE
+======================================================
+
+Keep clean architecture.
+
+Create
+
+pages/context
+
+components/context
+
+hooks/context
+
+services/context
+
+types/context
+
+======================================================
+NEW API SERVICE
+======================================================
+
+Create ContextService
+
+retrieveEngineeringContext()
+
+searchByQuestion()
+
+getSearchHistory()
+
+======================================================
+FUTURE READY
+======================================================
+
+UI should support future capabilities.
+
+Previous RCA Search
+
+Slack Integration
+
+ServiceNow
+
+Azure DevOps
+
+Datadog
+
+Grafana
+
+without redesign.
+
+======================================================
+OUTPUT REQUIRED
+======================================================
+
+Generate
+
+1. Updated folder structure
+
+2. React components
+
+3. API service
+
+4. Types
+
+5. Routing changes
+
+6. UI mockup
+
+7. Responsive layout
+
+8. State management
+
+9. Component hierarchy
+
+10. Complete production-quality React code.
+
+Do not modify existing screens.
+
+Only extend the application.
+
+
+"Why was this selected?"
+
+Every evidence card should explain why Knowledge Service returned it.
+
+Example:
+
+------------------------------------------------------
+
+GitHub Commit
+
+abc123
+
+Score
+
+98%
+
+✔ Why was this selected?
+
+• Same payment-service
+
+• Deployment happened 8 minutes before incident
+
+• Commit modified Hikari configuration
+
+• Linked to Jira PAY-421
+
+• High semantic similarity with uploaded logs
+
+------------------------------------------------------
+
+This makes the system explainable.

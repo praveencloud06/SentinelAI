@@ -1,0 +1,23 @@
+2026-07-12 11:30:12.234 INFO  [notification-service] [http-nio-8080-exec-23] c.s.notification.controller.NotificationController - Processing notification request notificationId=NOT-20260712-001234
+2026-07-12 11:30:45.567 ERROR [notification-service] [http-nio-8080-exec-23] c.s.notification.service.NotificationService - Failed to retrieve session from Redis
+redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.jedis.util.Pool.getResource(Pool.java:53)
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:226)
+	at com.sentinel.notification.cache.RedisSessionManager.getSession(RedisSessionManager.java:45)
+	at com.sentinel.notification.service.NotificationService.processNotification(NotificationService.java:67)
+Caused by: redis.clients.jedis.exceptions.JedisException: java.net.SocketTimeoutException: connect timed out
+	at redis.clients.jedis.Connection.connect(Connection.java:207)
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:93)
+	at redis.clients.jedis.Connection.sendCommand(Connection.java:126)
+2026-07-12 11:31:12.890 WARN  [notification-service] [http-nio-8080-exec-24] c.s.notification.cache.RedisSessionManager - Redis connection failed. Cluster may be undergoing failover.
+2026-07-12 11:32:15.123 ERROR [notification-service] [http-nio-8080-exec-25] c.s.notification.service.NotificationService - Notification delivery failed: Redis cluster unavailable
+2026-07-12 11:32:45.456 WARN  [notification-service] [redis-health-check] c.s.notification.health.RedisHealthCheck - Redis primary node not responding. Memory usage was 95% before failover.
+2026-07-12 11:33:12.789 INFO  [notification-service] [redis-health-check] c.s.notification.health.RedisHealthCheck - Redis automatic failover detected. Replica promoted to primary.
+2026-07-12 11:34:45.123 ERROR [notification-service] [http-nio-8080-exec-26] c.s.notification.service.NotificationService - Session cache cleared during Redis failover. Users may need to re-authenticate.
+2026-07-12 11:35:12.456 WARN  [notification-service] [http-nio-8080-exec-27] c.s.notification.service.NotificationService - Notification delivery failures: 87% (last 100 requests). Review NOT-223 for similar issues.
+2026-07-12 11:40:15.789 INFO  [notification-service] [redis-admin] c.s.notification.admin.RedisAdminService - Redis memory increased from 8GB to 16GB
+2026-07-12 11:45:12.123 INFO  [notification-service] [http-nio-8080-exec-30] c.s.notification.controller.NotificationController - Processing notification request notificationId=NOT-20260712-001567
+2026-07-12 11:45:12.345 INFO  [notification-service] [http-nio-8080-exec-30] c.s.notification.service.NotificationService - Notification delivered successfully
+2026-07-12 11:45:15.678 INFO  [notification-service] [main] com.sentinel.notification.NotificationApplication - Deployment of v2.7.1 with Redis retry logic complete. Commit stu901vwx234 applied.
+2026-07-12 12:00:12.901 INFO  [notification-service] [notification-requeue] c.s.notification.service.NotificationRequeueService - Re-queueing 2,345 failed notifications
+2026-07-12 12:00:45.234 INFO  [notification-service] [notification-requeue] c.s.notification.service.NotificationRequeueService - Notification service recovered. All pending notifications re-queued.

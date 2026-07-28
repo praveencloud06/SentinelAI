@@ -18,7 +18,7 @@ public class ElkProperties {
     private String url = "http://localhost:9200";
 
     /** Elasticsearch index that holds application logs. */
-    private String index = "logs-application";
+    private String index = "sentinelai-logs";
 
     /**
      * Upper bound on log documents fetched per investigation request.

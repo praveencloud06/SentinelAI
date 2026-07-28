@@ -1,7 +1,10 @@
 package com.sentinelai.knowledge.infrastructure.persistence;
 
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -29,6 +32,9 @@ public class JiraIssueEntity {
     @Column(nullable = false, length = 512)
     private String summary;
 
+    @Column(columnDefinition = "text")
+    private String description;
+
     @Column(name = "issue_type", length = 80)
     private String issueType;
 
@@ -49,4 +55,8 @@ public class JiraIssueEntity {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "embedding_status", length = 40)
+    private EmbeddingStatus embeddingStatus;
 }

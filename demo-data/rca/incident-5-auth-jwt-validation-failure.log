@@ -1,0 +1,20 @@
+2026-07-10 08:00:12.234 INFO  [auth-service] [http-nio-8080-exec-67] c.s.auth.controller.AuthController - Processing authentication request userId=user@example.com
+2026-07-10 08:00:12.456 ERROR [auth-service] [http-nio-8080-exec-67] c.s.auth.service.JwtValidationService - JWT validation failed: Invalid signature
+io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:385)
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:521)
+	at io.jsonwebtoken.impl.DefaultJwtParser.parseClaimsJws(DefaultJwtParser.java:596)
+	at com.sentinel.auth.service.JwtValidationService.validateToken(JwtValidationService.java:89)
+	at com.sentinel.auth.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:67)
+2026-07-10 08:00:45.789 WARN  [auth-service] [http-nio-8080-exec-68] c.s.auth.service.JwtValidationService - JWT validation intermittent failures detected. Key synchronization issue suspected.
+2026-07-10 08:01:12.123 ERROR [auth-service] [http-nio-8080-exec-69] c.s.auth.service.JwtValidationService - JWT validation failed: Invalid signature
+2026-07-10 08:02:45.456 ERROR [auth-service] [http-nio-8080-exec-70] c.s.auth.service.JwtValidationService - CRITICAL: 50% of JWT validation requests failing. Key rotation synchronization failure.
+2026-07-10 08:03:12.789 WARN  [auth-service] [http-nio-8080-exec-71] c.s.auth.service.JwtValidationService - JWT signing key mismatch between auth-service instances. Review AUTH-890 for similar issues.
+2026-07-10 08:04:45.123 INFO  [auth-service] [key-rotation-check] c.s.auth.admin.KeyRotationMonitor - Key rotation cron job executed at 07:55 UTC
+2026-07-10 08:05:12.456 ERROR [auth-service] [key-rotation-check] c.s.auth.admin.KeyRotationMonitor - Public key propagation failed to 3 out of 6 auth-service instances
+2026-07-10 08:06:45.789 INFO  [auth-service] [key-sync-job] c.s.auth.admin.KeySyncService - Manual key synchronization triggered by operations team
+2026-07-10 08:08:12.123 INFO  [auth-service] [key-sync-job] c.s.auth.admin.KeySyncService - JWT public keys synchronized across all 6 instances
+2026-07-10 08:10:15.456 INFO  [auth-service] [http-nio-8080-exec-75] c.s.auth.controller.AuthController - Processing authentication request userId=user@example.com
+2026-07-10 08:10:15.678 INFO  [auth-service] [http-nio-8080-exec-75] c.s.auth.service.JwtValidationService - JWT validation successful
+2026-07-10 08:10:45.901 INFO  [auth-service] [main] com.sentinel.auth.AuthApplication - Deployment of v4.1.2 with distributed key rotation fix complete. Commit yza567bcd890 applied.
+2026-07-10 08:15:12.234 INFO  [auth-service] [http-nio-8080-exec-80] c.s.auth.service.JwtValidationService - Authentication service recovered. JWT validation success rate: 100% (last 100 requests)

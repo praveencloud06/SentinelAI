@@ -3,6 +3,7 @@ package com.sentinelai.knowledge.connector.confluence;
 import com.sentinelai.knowledge.api.dto.SyncRequest;
 import com.sentinelai.knowledge.connector.ConnectorSyncResult;
 import com.sentinelai.knowledge.connector.EngineeringConnector;
+import com.sentinelai.knowledge.domain.EmbeddingStatus;
 import com.sentinelai.knowledge.domain.EngineeringEventType;
 import com.sentinelai.knowledge.domain.SourceSystem;
 import com.sentinelai.knowledge.infrastructure.persistence.ConfluenceDocumentEntity;
@@ -31,11 +32,16 @@ public class ConfluenceConnector implements EngineeringConnector {
         document.setPageId("ARCH-001");
         document.setTenantId(tenantId);
         document.setTitle("Payment Service Retry Architecture");
+        document.setBody("The retry policy introduces exponential backoff to avoid cascading failures. " +
+                "After three consecutive timeouts the circuit breaker transitions to OPEN state and " +
+                "all requests are rejected immediately with a 503 until the next health probe succeeds. " +
+                "The initial retry delay is 200ms with a multiplier of 2, capped at 10 seconds. " +
+                "Database-level latency above 500ms is treated as a transient failure and triggers the backoff sequence.");
         document.setDocumentType("ADR");
         document.setVersion(3);
         document.setAuthor("SentinelAI Engineering");
         document.setLastModifiedAt(Instant.now().minusSeconds(1800));
-        document.setEmbeddingStatus("PENDING");
+        document.setEmbeddingStatus(EmbeddingStatus.PENDING);
         documentRepository.save(document);
 
         EngineeringEventEntity event = new EngineeringEventEntity();

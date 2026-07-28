@@ -1,0 +1,71 @@
+2026-07-20 14:30:12.456 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Starting PaymentApplication v2.1.5 on payment-pod-7f8d9c-xk2p with PID 1
+2026-07-20 14:30:12.459 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - The following profiles are active: production
+2026-07-20 14:30:13.234 INFO  [payment-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-07-20 14:30:14.567 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-20 14:30:14.789 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed. maxPoolSize=20, minIdle=10
+2026-07-20 14:30:15.123 INFO  [payment-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-07-20 14:30:15.234 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Started PaymentApplication in 2.987 seconds (JVM running for 3.456)
+2026-07-20 14:30:45.123 INFO  [payment-service] [http-nio-8080-exec-1] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00001
+2026-07-20 14:30:45.456 INFO  [payment-service] [http-nio-8080-exec-1] c.s.payment.service.PaymentService - Initiating payment transaction for amount=125.50 currency=USD
+2026-07-20 14:31:02.345 INFO  [payment-service] [http-nio-8080-exec-2] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00002
+2026-07-20 14:31:15.678 WARN  [payment-service] [http-nio-8080-exec-3] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=32s123ms).
+2026-07-20 14:31:32.234 INFO  [payment-service] [http-nio-8080-exec-4] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00003
+2026-07-20 14:31:45.789 ERROR [payment-service] [http-nio-8080-exec-5] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30017ms
+java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30017ms.
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:696)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:197)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:162)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:128)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:159)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:117)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:330)
+	at com.sentinel.payment.repository.PaymentRepository.save(PaymentRepository.java:45)
+	at com.sentinel.payment.service.PaymentService.processPayment(PaymentService.java:78)
+	at com.sentinel.payment.controller.PaymentController.createPayment(PaymentController.java:56)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+2026-07-20 14:32:15.234 ERROR [payment-service] [http-nio-8080-exec-6] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30012ms
+2026-07-20 14:32:15.567 WARN  [payment-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Connection pool is exhausted. Active connections: 20, Idle connections: 0, Threads waiting: 15
+2026-07-20 14:32:45.891 ERROR [payment-service] [http-nio-8080-exec-7] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30018ms
+2026-07-20 14:33:12.456 ERROR [payment-service] [http-nio-8080-exec-8] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30015ms
+2026-07-20 14:33:12.678 WARN  [payment-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Connection pool exhausted. Consider increasing maxPoolSize. Active=20, Idle=0, Waiting=28
+2026-07-20 14:33:45.123 ERROR [payment-service] [http-nio-8080-exec-9] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30011ms
+2026-07-20 14:34:15.789 ERROR [payment-service] [http-nio-8080-exec-10] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30019ms
+2026-07-20 14:34:45.234 WARN  [payment-service] [http-nio-8080-exec-11] c.s.payment.controller.PaymentController - Payment processing timeout after 60 seconds
+2026-07-20 14:35:12.567 ERROR [payment-service] [http-nio-8080-exec-12] c.s.payment.service.PaymentService - Database connection timeout. This may be related to recent configuration changes in commit abc123def456
+2026-07-20 14:35:45.890 ERROR [payment-service] [http-nio-8080-exec-13] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30013ms
+2026-07-20 14:36:15.234 WARN  [payment-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=20, active=20, idle=0, waiting=45)
+2026-07-20 14:36:45.567 ERROR [payment-service] [http-nio-8080-exec-14] c.s.payment.service.PaymentService - CRITICAL: Payment service degraded. Connection pool exhaustion detected. Review PAY-421 for similar issues.
+2026-07-20 14:37:12.891 ERROR [payment-service] [http-nio-8080-exec-15] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30016ms
+2026-07-20 14:37:45.123 WARN  [payment-service] [http-nio-8080-exec-16] c.s.payment.controller.PaymentController - Payment failure rate: 85% (last 100 requests)
+2026-07-20 14:38:12.456 ERROR [payment-service] [http-nio-8080-exec-17] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30014ms
+2026-07-20 14:38:45.789 INFO  [payment-service] [http-nio-8080-exec-18] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00045
+2026-07-20 14:39:12.123 ERROR [payment-service] [http-nio-8080-exec-19] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30012ms
+2026-07-20 14:39:45.456 WARN  [payment-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Connection pool exhausted. Possible cause: database timeout configuration changed in v2.1.5
+2026-07-20 14:40:12.789 ERROR [payment-service] [http-nio-8080-exec-20] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30017ms
+2026-07-20 14:40:45.123 INFO  [payment-service] [http-nio-8080-exec-21] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00056
+2026-07-20 14:41:12.456 ERROR [payment-service] [http-nio-8080-exec-22] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30015ms
+2026-07-20 14:41:45.789 WARN  [payment-service] [http-nio-8080-exec-23] c.s.payment.controller.PaymentController - Multiple payment timeouts detected. Database transaction timeout may be too high.
+2026-07-20 14:42:12.123 ERROR [payment-service] [http-nio-8080-exec-24] c.s.payment.service.PaymentService - Payment transaction failed: Connection is not available, request timed out after 30018ms
+2026-07-20 14:42:45.456 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Received SIGTERM signal, initiating graceful shutdown
+2026-07-20 14:42:45.567 INFO  [payment-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat stopped gracefully
+2026-07-20 14:42:45.678 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-20 14:42:46.123 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-20 14:42:46.234 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Payment service stopped
+2026-07-20 15:00:12.456 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Starting PaymentApplication v2.1.4 (rollback) on payment-pod-8g9e0d-pl3q with PID 1
+2026-07-20 15:00:12.567 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - The following profiles are active: production
+2026-07-20 15:00:13.123 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-20 15:00:13.345 INFO  [payment-service] [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed. maxPoolSize=20, minIdle=10, connectionTimeout=5000ms
+2026-07-20 15:00:14.567 INFO  [payment-service] [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-07-20 15:00:14.678 INFO  [payment-service] [main] com.sentinel.payment.PaymentApplication - Started PaymentApplication in 2.456 seconds (JVM running for 2.987)
+2026-07-20 15:05:12.123 INFO  [payment-service] [http-nio-8080-exec-1] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00078
+2026-07-20 15:05:12.234 INFO  [payment-service] [http-nio-8080-exec-1] c.s.payment.service.PaymentService - Payment transaction completed successfully in 245ms
+2026-07-20 15:05:45.567 INFO  [payment-service] [http-nio-8080-exec-2] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00079
+2026-07-20 15:05:45.678 INFO  [payment-service] [http-nio-8080-exec-2] c.s.payment.service.PaymentService - Payment transaction completed successfully in 278ms
+2026-07-20 15:15:12.456 INFO  [payment-service] [http-nio-8080-exec-3] c.s.payment.controller.PaymentController - Processing payment request paymentId=PAY-20260720-00089
+2026-07-20 15:15:12.567 INFO  [payment-service] [http-nio-8080-exec-3] c.s.payment.service.PaymentService - Payment transaction completed successfully in 198ms
+2026-07-20 15:15:45.890 INFO  [payment-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=20, active=3, idle=17, waiting=0)
+2026-07-20 15:15:45.901 INFO  [payment-service] [http-nio-8080-exec-4] c.s.payment.controller.PaymentController - Payment service recovered. Success rate: 100% (last 20 requests)

@@ -1,0 +1,35 @@
+2026-07-15 16:00:12.234 INFO  [vehicle-registration-service] [http-nio-8080-exec-45] c.s.vehicle.controller.RegistrationController - Processing vehicle registration lookup request vin=1HGBH41JXMN109186
+2026-07-15 16:00:57.456 ERROR [vehicle-registration-service] [http-nio-8080-exec-45] c.s.vehicle.service.RegistrationService - Vehicle lookup failed: Query timeout
+java.sql.SQLTimeoutException: ORA-01013: user requested cancel of current operation
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:445)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:396)
+	at oracle.jdbc.driver.T4C8Oall.processError(T4C8Oall.java:879)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:450)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:192)
+	at oracle.jdbc.driver.T4C8Oall.doOALL(T4C8Oall.java:531)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:207)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForRows(T4CPreparedStatement.java:1044)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1329)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:3584)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeQuery(OraclePreparedStatement.java:3628)
+	at oracle.jdbc.driver.OraclePreparedStatementWrapper.executeQuery(OraclePreparedStatementWrapper.java:1495)
+	at com.sentinel.vehicle.repository.VehicleRepository.findByVin(VehicleRepository.java:67)
+	at com.sentinel.vehicle.service.RegistrationService.lookupVehicle(RegistrationService.java:45)
+	at com.sentinel.vehicle.controller.RegistrationController.getRegistration(RegistrationController.java:89)
+2026-07-15 16:01:12.789 INFO  [vehicle-registration-service] [http-nio-8080-exec-46] c.s.vehicle.controller.RegistrationController - Processing vehicle registration lookup request vin=2T1BU4EE8DC123456
+2026-07-15 16:02:02.123 ERROR [vehicle-registration-service] [http-nio-8080-exec-46] c.s.vehicle.service.RegistrationService - Vehicle lookup failed: Query timeout after 45 seconds
+2026-07-15 16:02:12.456 WARN  [vehicle-registration-service] [http-nio-8080-exec-47] c.s.vehicle.service.RegistrationService - Multiple query timeouts detected. Database performance degradation suspected.
+2026-07-15 16:03:15.789 ERROR [vehicle-registration-service] [http-nio-8080-exec-48] c.s.vehicle.service.RegistrationService - CRITICAL: Vehicle registration queries timing out. Query execution time: 45+ seconds (normal: 200ms)
+2026-07-15 16:04:45.123 ERROR [vehicle-registration-service] [http-nio-8080-exec-49] c.s.vehicle.service.RegistrationService - Database query timeout. Full table scan detected on VEHICLE_REGISTRATION (45M rows).
+2026-07-15 16:05:12.456 WARN  [vehicle-registration-service] [http-nio-8080-exec-50] c.s.vehicle.service.RegistrationService - Query execution plan changed after Oracle statistics refresh at 15:30 UTC
+2026-07-15 16:06:45.789 ERROR [vehicle-registration-service] [http-nio-8080-exec-51] c.s.vehicle.service.RegistrationService - Vehicle lookup failed: Query timeout. Review VEH-567 for similar issues.
+2026-07-15 16:08:12.123 ERROR [vehicle-registration-service] [http-nio-8080-exec-52] c.s.vehicle.service.RegistrationService - Oracle execution plan issue detected. Expected INDEX UNIQUE SCAN, got FULL TABLE SCAN.
+2026-07-15 16:10:45.456 WARN  [vehicle-registration-service] [DBA-Session] c.s.vehicle.admin.DatabaseMonitor - DBA investigating query performance degradation
+2026-07-15 16:15:12.789 INFO  [vehicle-registration-service] [DBA-Session] c.s.vehicle.admin.DatabaseMonitor - Bad execution plan identified. SQL_ID: 8fy2g3x4h5j6k
+2026-07-15 16:30:15.123 INFO  [vehicle-registration-service] [DBA-Session] c.s.vehicle.admin.DatabaseMonitor - Query hint added to force index scan. Testing performance.
+2026-07-15 16:35:45.456 INFO  [vehicle-registration-service] [http-nio-8080-exec-55] c.s.vehicle.controller.RegistrationController - Processing vehicle registration lookup request vin=1HGBH41JXMN109186
+2026-07-15 16:35:45.678 INFO  [vehicle-registration-service] [http-nio-8080-exec-55] c.s.vehicle.service.RegistrationService - Vehicle lookup completed successfully in 198ms
+2026-07-15 16:45:12.234 INFO  [vehicle-registration-service] [http-nio-8080-exec-60] c.s.vehicle.controller.RegistrationController - Processing vehicle registration lookup request vin=3VWFE21C04M000001
+2026-07-15 16:45:12.432 INFO  [vehicle-registration-service] [http-nio-8080-exec-60] c.s.vehicle.service.RegistrationService - Vehicle lookup completed successfully in 176ms  
+2026-07-15 16:45:15.789 INFO  [vehicle-registration-service] [main] com.sentinel.vehicle.VehicleApplication - Deployment of v1.9.3 with query optimization complete. Commit mno345pqr678 applied.
+2026-07-15 17:00:12.456 INFO  [vehicle-registration-service] [http-nio-8080-exec-65] c.s.vehicle.service.RegistrationService - Vehicle registration service recovered. Query performance restored to normal.

@@ -1,11 +1,27 @@
 @echo off
-setlocal
+REM ============================================================================
+REM SentinelAI ELK Demo Data Loader (Redirect)
+REM ============================================================================
+REM This script redirects to the new demo data location
+REM For direct access, use: demo-data\elk\elk-seed-demo-incidents.bat
+REM ============================================================================
 
-REM ============================================================
-REM SentinelAI - Seed Elasticsearch with enterprise demo logs
-REM ============================================================
+echo.
+echo =================================================================
+echo SentinelAI ELK Demo Data Loader
+echo =================================================================
+echo.
+echo Note: Demo data has been reorganized into demo-data/elk/
+echo Redirecting to: demo-data\elk\elk-seed-demo-incidents.bat
+echo.
+echo For future use, run directly from:
+echo   cd demo-data\elk
+echo   .\elk-seed-demo-incidents.bat
+echo.
+pause
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0elk-seed-data.ps1"
-set EXIT_CODE=%ERRORLEVEL%
+cd demo-data\elk
+call elk-seed-demo-incidents.bat
+cd ..\..
 
-endlocal & exit /b %EXIT_CODE%
+exit /b %ERRORLEVEL%

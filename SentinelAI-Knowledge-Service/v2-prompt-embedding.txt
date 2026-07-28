@@ -1,0 +1,715 @@
+You are a Principal Software Architect, Staff Spring Boot Engineer and AI Platform Architect.
+
+You are working on SentinelAI.
+
+=========================================================
+VERY IMPORTANT
+=========================================================
+
+DO NOT rewrite the existing application.
+
+DO NOT remove existing APIs.
+
+DO NOT change existing entities unless absolutely required.
+
+DO NOT break current functionality.
+
+Current application is working end-to-end.
+
+The objective is to EVOLVE the Knowledge Service into Version 2 while preserving backward compatibility.
+
+Everything that currently works MUST continue to work.
+
+This is an enterprise application.
+
+Use production-grade architecture.
+
+=========================================================
+CURRENT SYSTEM
+=========================================================
+
+Current Knowledge Service provides:
+
+• GitHub metadata synchronization
+• Jira synchronization
+• Confluence synchronization
+• Jenkins synchronization
+• Webhook ingestion
+• Timeline APIs
+• Relationship APIs
+• Repository APIs
+• Deployment APIs
+• Release APIs
+• Jira APIs
+
+Current Core Service calls Knowledge Service.
+
+Knowledge Service returns metadata.
+
+Core appends most of the metadata to the LLM prompt.
+
+Current issue:
+
+Large prompts
+
+Irrelevant information
+
+Poor ranking
+
+Lower RCA quality
+
+High token cost
+
+No semantic retrieval
+
+=========================================================
+NEW OBJECTIVE
+=========================================================
+
+Knowledge Service V2 should become an
+
+ENGINEERING CONTEXT PLATFORM
+
+NOT merely a metadata repository.
+
+Knowledge Service should become responsible for
+
+finding
+
+ranking
+
+filtering
+
+engineering context.
+
+Core should never receive unnecessary data.
+
+=========================================================
+BACKWARD COMPATIBILITY
+=========================================================
+
+Existing APIs must continue working.
+
+Existing UI must continue working.
+
+Existing database tables should remain.
+
+Existing webhook flow should remain.
+
+Existing sync flow should remain.
+
+Existing controllers should remain.
+
+Existing services should continue functioning.
+
+All new capabilities should be additive.
+
+=========================================================
+NEW CAPABILITIES
+=========================================================
+
+Add the following capabilities.
+
+=========================================================
+1. ENGINEERING CONTEXT RETRIEVAL ENGINE
+=========================================================
+
+Create a new module
+
+Context Retrieval Engine
+
+Responsibilities
+
+Accept incident information
+
+Extract entities
+
+Retrieve relevant engineering context
+
+Perform hybrid search
+
+Rank evidence
+
+Return only relevant engineering evidence.
+
+=========================================================
+2. HYBRID SEARCH
+=========================================================
+
+Do NOT rely only on embeddings.
+
+Hybrid Retrieval must combine
+
+Exact SQL search
+
+Relationship graph
+
+Timeline search
+
+Semantic vector search
+
+Service matching
+
+Environment matching
+
+Deployment correlation
+
+Repository correlation
+
+Jira correlation
+
+Release correlation
+
+Recency
+
+Relationship strength
+
+=========================================================
+3. EMBEDDING SUPPORT
+=========================================================
+
+Knowledge Service should support embeddings.
+
+DO NOT store vectors inside every business table.
+
+Create ONE shared table.
+
+knowledge_embedding
+
+Fields
+
+id
+
+entityType
+
+entityId
+
+chunkNumber
+
+content
+
+embedding
+
+embeddingModel
+
+embeddingVersion
+
+status
+
+contentHash
+
+lastEmbedded
+
+createdTime
+
+updatedTime
+
+=========================================================
+4. EMBEDDING GENERATION
+=========================================================
+
+Embedding generation must NOT block synchronization.
+
+Current sync flow
+
+Save Metadata
+
+must remain unchanged.
+
+After successful transaction
+
+EmbeddingStatus=PENDING
+
+Trigger asynchronous embedding generation.
+
+Use
+
+Spring @Async
+
+Dedicated ThreadPool
+
+Retry Scheduler
+
+Do NOT introduce Kafka.
+
+=========================================================
+5. EMBEDDING PROVIDER
+=========================================================
+
+Create abstraction.
+
+EmbeddingProvider
+
+Implementations
+
+OpenAI
+
+Ollama
+
+Azure OpenAI
+
+Future providers
+
+Knowledge Service should never directly depend on OpenAI SDK.
+
+=========================================================
+6. AI ENGINE
+=========================================================
+
+Reuse SentinelAI AI Engine.
+
+Extend it.
+
+Add
+
+POST /api/embeddings
+
+Knowledge Service calls AI Engine.
+
+AI Engine routes to
+
+text-embedding-3-small
+
+nomic-embed-text
+
+bge-m3
+
+etc.
+
+Reuse provider routing.
+
+=========================================================
+7. WHAT SHOULD BE EMBEDDED
+=========================================================
+
+Embed only meaningful engineering text.
+
+GitHub
+
+Commit Message
+
+PR Title
+
+PR Description
+
+Release Notes
+
+NOT
+
+Commit Hash
+
+Branch
+
+IDs
+
+Jira
+
+Summary
+
+Description
+
+Comments
+
+NOT
+
+Priority
+
+Status
+
+IDs
+
+Confluence
+
+Title
+
+Body
+
+Runbooks
+
+Architecture Decisions
+
+Troubleshooting Guides
+
+Jenkins
+
+Deployment Notes
+
+Failure Reason
+
+Build Summary
+
+NOT
+
+Build Number
+
+IDs
+
+=========================================================
+8. CONTEXT RETRIEVAL API
+=========================================================
+
+Create new API
+
+POST
+
+/api/context/retrieve
+
+Purpose
+
+Given logs
+
+Return only relevant engineering evidence.
+
+Request
+
+Logs
+
+Optional service
+
+Environment
+
+Repository
+
+Deployment
+
+Commit
+
+Time
+
+Response
+
+Summary
+
+Ranked Engineering Evidence
+
+Reason why selected
+
+Similarity score
+
+Relationship score
+
+Timeline score
+
+Metadata
+
+=========================================================
+9. ENGINEERING CONTEXT EXPLORER
+=========================================================
+
+Knowledge Service should also support direct UI usage.
+
+Create APIs for a new UI screen.
+
+Engineering Context Explorer
+
+Capabilities
+
+Paste logs
+
+Find engineering evidence
+
+Search by natural language
+
+Find similar incidents
+
+Find related Jira
+
+Find deployment history
+
+Find relevant runbooks
+
+Find related commits
+
+This feature should work WITHOUT RCA.
+
+=========================================================
+10. NEW UI SCREEN
+=========================================================
+
+Design API specifically for UI.
+
+The UI should only call
+
+POST /api/context/retrieve
+
+UI should never call
+
+timeline
+
+deployment
+
+jira
+
+relationships
+
+directly.
+
+Knowledge Service becomes the orchestration layer.
+
+=========================================================
+11. CONTEXT RANKING
+=========================================================
+
+Design ranking algorithm.
+
+Combine
+
+Exact match
+
+Relationship graph
+
+Timeline proximity
+
+Vector similarity
+
+Recency
+
+Service match
+
+Environment match
+
+Deployment correlation
+
+Repository correlation
+
+Previous incidents
+
+Return only Top 10 evidence.
+
+=========================================================
+12. ENGINEERING EVIDENCE MODEL
+=========================================================
+
+Do NOT return raw entities.
+
+Create common model.
+
+EngineeringEvidence
+
+Fields
+
+Type
+
+Title
+
+Summary
+
+Score
+
+Reason
+
+Metadata
+
+SourceSystem
+
+SourceId
+
+Link
+
+Every integration should map into this object.
+
+=========================================================
+13. VECTOR SEARCH
+=========================================================
+
+Use pgvector.
+
+Support
+
+HNSW index
+
+Similarity search
+
+Chunking
+
+Large Confluence pages
+
+Large Runbooks
+
+Chunk before embedding.
+
+=========================================================
+14. NEW PACKAGE STRUCTURE
+=========================================================
+
+Design package structure.
+
+Existing packages remain.
+
+New packages
+
+embedding
+
+retrieval
+
+ranking
+
+context
+
+vector
+
+provider
+
+chunking
+
+async
+
+scheduler
+
+=========================================================
+15. ARCHITECTURE_V2
+=========================================================
+
+Design complete V2 architecture.
+
+Provide
+
+High-level architecture
+
+Component diagram
+
+Class diagram
+
+Sequence diagram
+
+Database diagram
+
+Retrieval flow
+
+Embedding flow
+
+Sync flow
+
+RCA flow
+
+Engineering Context Search flow
+
+Future scalability architecture.
+
+=========================================================
+16. RCA FLOW
+=========================================================
+
+Current
+
+Logs
+
+↓
+
+Core
+
+↓
+
+Knowledge Service
+
+↓
+
+Everything
+
+↓
+
+AI
+
+↓
+
+RCA
+
+New
+
+Logs
+
+↓
+
+Core
+
+↓
+
+Context Retrieval API
+
+↓
+
+Top Ranked Engineering Evidence
+
+↓
+
+Prompt Builder
+
+↓
+
+AI Engine
+
+↓
+
+Structured RCA
+
+=========================================================
+17. PROMPT OPTIMIZATION
+=========================================================
+
+Knowledge Service should NOT build prompts.
+
+Knowledge Service only returns engineering evidence.
+
+Core builds the prompt.
+
+=========================================================
+18. FUTURE READY
+=========================================================
+
+Architecture should support future integration with
+
+ServiceNow
+
+Azure DevOps
+
+Slack
+
+Teams
+
+Datadog
+
+Splunk
+
+Grafana
+
+without changing Core.
+
+=========================================================
+OUTPUT REQUIRED
+=========================================================
+
+Generate
+
+1. Architecture V2 document
+
+2. Package structure
+
+3. Database changes
+
+4. Entity design
+
+5. Embedding design
+
+6. Retrieval Engine design
+
+7. Ranking algorithm
+
+8. Context Retrieval API
+
+9. Engineering Context Explorer API
+
+10. Sequence diagrams
+
+11. Class diagrams
+
+12. Database diagrams
+
+13. Migration strategy
+
+14. Step-by-step implementation plan
+
+15. Production-quality Java code for every new component.
+
+The solution must follow Spring Boot best practices, SOLID principles, hexagonal architecture, and enterprise-grade design.
+
+Backward compatibility is mandatory.
